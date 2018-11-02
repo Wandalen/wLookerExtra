@@ -1,7 +1,6 @@
-
 {
   "name": "wlookerextra",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "license": "MIT",
@@ -14,7 +13,6 @@
     "test": "wtest proto",
     "docgen": "wdocgen proto"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/Wandalen/wLookerExtra.git"
