@@ -1,0 +1,35 @@
+
+{
+  "name": "wlookerextra",
+  "version": "0.3.0",
+  "description": "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
+  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "license": "MIT",
+  "main": "proto/dwtools/abase/layer4/LookerExtra.s",
+  "files": [
+    "proto/dwtools/abase/layer4",
+    "production"
+  ],
+  "scripts": {
+    "test": "wtest proto",
+    "docgen": "wdocgen proto"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wLookerExtra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Wandalen/wLookerExtra/issues"
+  },
+  "dependencies": {
+    "wTools": ""
+  },
+  "devDependencies": {
+    "wTesting": "",
+    "wlookerextra": "."
+  },
+  "keywords": [
+    "wTools"
+  ]
+}
