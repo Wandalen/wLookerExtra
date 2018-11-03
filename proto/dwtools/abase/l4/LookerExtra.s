@@ -30,6 +30,10 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
+  let _ = _global_.wTools;
+
+  _.include( 'wLooker' );
+
 }
 
 let _global = _global_;
@@ -131,7 +135,7 @@ function entitySearch( o )
     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
   }
 
-  logger.log( 'entitySearch',o );
+  // logger.log( 'entitySearch',o );
 
   _.routineOptions( entitySearch,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
