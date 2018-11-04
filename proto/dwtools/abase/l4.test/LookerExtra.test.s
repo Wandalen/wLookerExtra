@@ -24,9 +24,9 @@ if( typeof module !== 'undefined' )
 
   var _ = _global_.wTools;
 
+  require( '../l4/LookerExtra.s' );
+
   _.include( 'wTesting' );
-  _.include( 'wStringer' );
-  _.include( 'wStringsExtra' );
 
 }
 
@@ -36,6 +36,17 @@ var _ = _global_.wTools;
 // --
 // tests
 // --
+
+function entitySearch( test )
+{
+
+  var src = { a : 0, e : { d : 'something' } };
+  var got = _.entitySearch( src, 'something' );
+  var expected = { '/e/d' : 'something' };
+
+  test.identical( got, expected );
+
+}
 
 // --
 // declare
@@ -54,6 +65,8 @@ var Self =
 
   tests :
   {
+
+    entitySearch : entitySearch,
 
   }
 
