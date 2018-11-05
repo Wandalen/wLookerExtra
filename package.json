@@ -7,7 +7,7 @@
   "main": "proto/dwtools/abase/l4/LookerExtra.s",
   "files": [
     "proto/dwtools/abase/l4",
-    "production"
+    "proto/dwtools/Tools.s", "production"
   ],
   "scripts": {
     "test": "wtest proto",
