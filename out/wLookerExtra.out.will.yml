@@ -162,8 +162,8 @@ reflector:
       ./dwtools/abase/l4/LookerExtra.s: true
       ./dwtools/abase/l4.test/LookerExtra.test.s: true
     srcFilter:
-      basePath: ./proto
-      prefixPath: .
+      basePath: .
+      prefixPath: proto
     dstFilter:
       basePath: .
       prefixPath: .
