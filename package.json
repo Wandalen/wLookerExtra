@@ -25,8 +25,7 @@
     "wTools": ""
   },
   "devDependencies": {
-    "wTesting": "",
-    "wlookerextra": "."
+    "wTesting": ""
   },
   "keywords": [
     "wTools"
