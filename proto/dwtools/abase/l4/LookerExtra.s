@@ -3,7 +3,8 @@
 'use strict';
 
 /**
-  @module Tools/base/LookerExtra - Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look.
+ * Collection of routines to compare two complex structures. The module can answer questions: are two structures equivalent? are them identical? what is the difference between each other? Use the module avoid manually work and cherry picking.
+  @module Tools/base/Comparator
 */
 
 /**
