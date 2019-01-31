@@ -3,7 +3,7 @@ about :
 
   name : "wLookerExtra"
   description : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look"
-  version : "0.3.19"
+  version : "0.3.20"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
