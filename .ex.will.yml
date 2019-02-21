@@ -3,7 +3,7 @@
 about :
 
   name : "wLookerExtra"
-  description : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look"
+  description : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on the routine look."
   version : "0.3.24"
   enabled : 1
   interpreters :
@@ -48,4 +48,3 @@ build :
     steps :
       - build::debug.raw
       - step::export.proto
-

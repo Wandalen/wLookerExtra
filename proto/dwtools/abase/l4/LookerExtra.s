@@ -3,12 +3,12 @@
 'use strict';
 
 /**
- * Collection of routines to compare two complex structures. The module can answer questions: are two structures equivalent? are them identical? what is the difference between each other? Use the module avoid manually work and cherry picking.
-  @module Tools/base/Comparator
+ * Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on the routine look.
+  @module Tools/base/LookerExtra
 */
 
 /**
- * @file Looker.s.
+ * @file l4/LookerExtra.s.
  */
 
 if( typeof module !== 'undefined' )
@@ -119,11 +119,9 @@ function entitySearch( o )
     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
   }
 
-  // logger.log( 'entitySearch',o );
-
+  _.mapSupplement( o, entitySearch.defaults );
   _.routineOptions( entitySearch,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-
   _.assert( o.onDown.length === 0 || o.onDown.length === 3 );
   _.assert( o.onUp.length === 0 || o.onUp.length === 3 );
 
@@ -138,6 +136,16 @@ function entitySearch( o )
     o.condition = _filter_functor( o.condition,1 );
     _.assert( o.condition.length === 0 || o.condition.length === 3 );
   }
+
+  /* */
+
+  let onUp = o.onUp;
+  let lookOptions = _.mapOnly( o, _.look.defaults )
+  lookOptions.onUp = handleUp;
+
+  _.look( lookOptions );
+
+  return result;
 
   /* */
 
@@ -171,7 +179,6 @@ function entitySearch( o )
 
   /* */
 
-  let onUp = o.onUp;
   function handleUp( e,k,it )
   {
 
@@ -205,14 +212,6 @@ function entitySearch( o )
 
   }
 
-  /* */
-
-  let lookOptions = _.mapOnly( o, _.look.defaults )
-  lookOptions.onUp = handleUp;
-
-  _.look( lookOptions );
-
-  return result;
 }
 
 entitySearch.defaults =
@@ -399,10 +398,10 @@ let Proto =
 
   // unsorted
 
-  entityWrap : entityWrap,
-  entitySearch : entitySearch,
-  entityFreezeRecursive : entityFreezeRecursive,
-  entityGroup : entityGroup, /* experimental */
+  entityWrap,
+  entitySearch,
+  entityFreezeRecursive,
+  entityGroup, /* experimental */
 
 }
 
@@ -412,9 +411,9 @@ _.mapSupplement( Self, Proto );
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

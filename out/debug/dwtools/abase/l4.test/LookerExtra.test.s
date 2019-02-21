@@ -49,7 +49,7 @@ var Self =
   tests :
   {
 
-    entitySearch : entitySearch,
+    entitySearch,
 
   }
 
