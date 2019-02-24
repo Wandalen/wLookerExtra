@@ -23,10 +23,10 @@ var _ = _global_.wTools;
 function entitySearch( test )
 {
 
+  test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
   var got = _.entitySearch( src, 'something' );
   var expected = { '/e/d' : 'something' };
-
   test.identical( got, expected );
 
 }

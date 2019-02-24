@@ -225,7 +225,7 @@ entitySearch.defaults =
   onDown : function(){},
 
   own : 1,
-  recursive : 1,
+  recursive : Infinity,
 
   returnParent : 0,
   usingExactPath : 0,
