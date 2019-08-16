@@ -13,6 +13,7 @@ about :
   - wTools
   - wReplicator
   - wResolver
+  - complex data structure
   license : MIT
   author : 'Kostiantyn Wandalen <wanalen@willbe.so>'
   contributors :
