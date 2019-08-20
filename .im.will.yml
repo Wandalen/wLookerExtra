@@ -3,15 +3,15 @@ submodule :
 
   wTools :
     path : npm:///wFiles
-    enabled : 0
+    enabled : 0 # submodule
   wlookerextra :
     path : hd://.
-    enabled : 0
+    enabled : 0 # submodule
     criterion :
       development : 1
   wTesting :
     path : npm:///wTesting
-    enabled : 0
+    enabled : 0 # submodule
     criterion :
       development : 1
 
