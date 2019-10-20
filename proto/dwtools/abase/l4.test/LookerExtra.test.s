@@ -38,7 +38,7 @@ function entitySearch( test )
 var Self =
 {
 
-  name : 'Tools/base/l4/LookerExtra',
+  name : 'Tools.base.l4.LookerExtra',
   silencing : 1,
   enabled : 1,
 
