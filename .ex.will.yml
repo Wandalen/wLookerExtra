@@ -26,7 +26,7 @@ about :
 path :
 
   repository : git+https:///github.com/Wandalen/wLookerExtra.git
-  remotes :
+  origins :
    - git+https:///github.com/Wandalen/wLookerExtra.git
    - npm:///wlookerextra
   bugtracker : https:///github.com/Wandalen/wLookerExtra/issues
