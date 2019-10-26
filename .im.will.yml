@@ -2,7 +2,7 @@
 submodule :
 
   wTools :
-    path : npm:///wFiles
+    path : npm:///wTools
     enabled : 0 # submodule
   wlookerextra :
     path : hd://.
