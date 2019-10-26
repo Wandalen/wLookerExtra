@@ -2,36 +2,40 @@ format: outwillfile-2.0
 root:
   - wLookerExtra.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wLookerExtra.out.will.yml: &ref_0
+    hash: 5d1eb78da852d375923ce4760483733d
+    size: 38227
+  ../.ex.will.yml: &ref_1
     hash: a6dcfe7e2807e351c64b189aa54fa27e
     size: 1856
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: f0ca6139d8b0b74681e807aa902b908f
     size: 4871
 module:
   wLookerExtra.out:
     about:
       name: wLookerExtra
+      org: noorg
       description: >-
         Collection of light-weight routines to traverse complex data structure.
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - wTools
         - wReplicator
         - wResolver
         - complex data structure
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wlookerextra
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -695,6 +699,22 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          reflector: 'reflector::exported.proto.export*'
+        criterion:
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          reflector: 'reflector::exported.files.proto.export*'
+        criterion:
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -783,23 +803,35 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wLookerExtra.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wLookerExtra
+      org: noorg
       description: >-
         Collection of light-weight routines to traverse complex data structure.
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 8.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - wTools
+        - wReplicator
+        - wResolver
+        - complex data structure
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wlookerextra
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -840,12 +872,8 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wLookerExtra/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: out
       temp:
         path: 'path::out'
@@ -1474,3 +1502,6 @@ module:
       ../.im.will.yml:
         hash: f0ca6139d8b0b74681e807aa902b908f
         size: 4871
+      wLookerExtra.out.will.yml:
+        hash: 5d1eb78da852d375923ce4760483733d
+        size: 38227
