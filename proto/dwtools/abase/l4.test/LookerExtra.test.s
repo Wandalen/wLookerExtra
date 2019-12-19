@@ -31,6 +31,70 @@ function entitySearch( test )
 
 }
 
+//
+
+function entitySearchOptionPathJoin( test )
+{
+  let ups = [];
+  let dws = [];
+  let structure =
+  {
+    int : 0,
+    str : 'str',
+    arr : [ 1, 3 ],
+    map : { m1 : new Date( Date.UTC( 1990, 0, 0 ) ), m3 : 'str' },
+    set : new Set([ 1, 3 ]),
+    hash : new HashMap([ [ new Date( Date.UTC( 1990, 0, 0 ) ), function(){} ], [ 'm3', 'str' ] ]),
+  }
+
+  /* - */
+
+  test.case = 'basic';
+  clean();
+  var found = _.entitySearch
+  ({
+    src : structure,
+    ins : 'str',
+    onPathJoin : onPathJoin,
+  });
+  var exp =
+  {
+    '/String::str' : 'str',
+    '/Object::map/String::m3' : 'str',
+    '/Map::hash/String::m3' : 'str',
+  }
+  test.identical( found, exp );
+
+  /* - */
+
+  function clean()
+  {
+    ups.splice( 0, ups.length );
+    dws.splice( 0, dws.length );
+  }
+
+  function onPathJoin( selectorPath, upToken, defaultUpToken, selectorName )
+  {
+    let it = this;
+    let result;
+
+    _.assert( arguments.length === 4 );
+
+    if( _.strEnds( selectorPath, upToken ) )
+    {
+      result = selectorPath + _.strType( it.src ) + '::' + selectorName;
+    }
+    else
+    {
+      result = selectorPath + defaultUpToken + _.strType( it.src ) + '::' + selectorName;
+    }
+
+    debugger;
+    return result;
+  }
+
+}
+
 // --
 // declare
 // --
@@ -50,6 +114,7 @@ var Self =
   {
 
     entitySearch,
+    entitySearchOptionPathJoin,
 
   }
 
