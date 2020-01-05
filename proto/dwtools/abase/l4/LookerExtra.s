@@ -55,26 +55,26 @@ function entityWrap( o )
 
   debugger;
 
-  _.routineOptions( entityWrap,o );
+  _.routineOptions( entityWrap, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.onCondition )
-  o.onCondition = _filter_functor( o.onCondition,1 );
+  o.onCondition = _filter_functor( o.onCondition, 1 );
 
   /* */
 
-  function handleDown( e,k,it )
+  function handleDown( e, k, it )
   {
 
     debugger;
 
     if( o.onCondition )
-    if( !o.onCondition.call( this,e,k,it ) )
+    if( !o.onCondition.call( this, e, k, it ) )
     return
 
     if( o.onWrap )
     {
-      let newElement = o.onWrap.call( this,e,k,it );
+      let newElement = o.onWrap.call( this, e, k, it );
 
       if( newElement !== e )
       {
@@ -135,7 +135,7 @@ entityWrap.defaults =
  * @param {Function} onDown=function(){}
  * @param {Boolean} own=1
  * @param {Number} recursive=Infinity
- * @param {Boolean} returnParent= 0
+ * @param {Boolean} returninDown= 0
  * @param {Boolean} usingExactPath= 0
  * @param {Boolean} searchingKey=1
  * @param {Boolean} searchingValue=1
@@ -167,20 +167,20 @@ function entitySearch( o )
   }
 
   _.mapSupplement( o, entitySearch.defaults );
-  _.routineOptions( entitySearch,o );
+  _.routineOptions( entitySearch, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( o.onDown.length === 0 || o.onDown.length === 3 );
   _.assert( o.onUp.length === 0 || o.onUp.length === 3 );
 
-  let strIns,regexpIns;
+  let strIns, regexpIns;
   strIns = String( o.ins );
 
   if( o.searchingCaseInsensitive && _.strIs( o.ins ) )
-  regexpIns = new RegExp( ( o.searchingSubstring ? '' : '^' ) + strIns + ( o.searchingSubstring ? '' : '$' ),'i' );
+  regexpIns = new RegExp( ( o.searchingSubstring ? '' : '^' ) + strIns + ( o.searchingSubstring ? '' : '$' ), 'i' );
 
   if( o.condition )
   {
-    o.condition = _filter_functor( o.condition,1 );
+    o.condition = _filter_functor( o.condition, 1 );
     _.assert( o.condition.length === 0 || o.condition.length === 3 );
   }
 
@@ -196,14 +196,16 @@ function entitySearch( o )
 
   /* */
 
-  function checkCandidate( e,k,it,r,path )
+  function checkCandidate( e, k, it, r, path )
   {
 
     let c = true;
     if( o.condition )
     {
-      c = o.condition.call( this,e,k,it );
+      c = o.condition.call( this, e, k, it );
     }
+
+    // logger.log( `checkCandidate ${path}` ); debugger;
 
     if( !c )
     return c;
@@ -226,17 +228,17 @@ function entitySearch( o )
 
   /* */
 
-  function handleUp( e,k,it )
+  function handleUp( e, k, it )
   {
 
     if( onUp )
-    if( onUp.call( this,e,k,it ) === false )
+    if( onUp.call( this, e, k, it ) === false )
     return false;
 
     let path = it.path;
 
     let r;
-    if( o.returnParent && it.down )
+    if( o.returninDown && it.down )
     {
       r = it.down.src;
       if( o.usingExactPath )
@@ -249,12 +251,12 @@ function entitySearch( o )
 
     if( o.searchingValue )
     {
-      checkCandidate.call( this,e,k,it,r,path );
+      checkCandidate.call( this, e, k, it, r, path );
     }
 
     if( o.searchingKey )
     {
-      checkCandidate.call( this,it.key,k,it,r,path );
+      checkCandidate.call( this, it.key, k, it, r, path );
     }
 
   }
@@ -274,7 +276,7 @@ entitySearch.defaults =
   own : 1,
   recursive : Infinity,
 
-  returnParent : 0,
+  returninDown : 0,
   usingExactPath : 0,
 
   searchingKey : 1,
@@ -340,7 +342,7 @@ function entityFreezeRecursive( src )
    * //  key1 : [ 1, 2, 3 ],
    * //  key3 : [ undefined, undefined, undefined ]
    * //}
-   * _.entityGroup( { src : [ {key1 : 1, key2 : 2 },{key1 : 2 },{key1 : 3 }], usingOriginal : 0, key : ['key1','key3']} );
+   * _.entityGroup( { src : [ {key1 : 1, key2 : 2 }, {key1 : 2 }, {key1 : 3 }], usingOriginal : 0, key : ['key1', 'key3']} );
    *
    * @example
    * // returns
@@ -374,20 +376,20 @@ function entityGroup( o )
     o.usingOriginal = 0;
 
     if( _.longIs( o.key ) )
-    o.key = _.mapKeys.apply( _,o.src );
+    o.key = _.mapKeys.apply( _, o.src );
     else
-    o.key = _.mapKeys.apply( _,_.mapVals( o.src ) );
+    o.key = _.mapKeys.apply( _, _.mapVals( o.src ) );
 
   }
 
   /* */
 
-  o = _.routineOptions( entityGroup,o );
+  o = _.routineOptions( entityGroup, o );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( o.key ) || _.arrayIs( o.key ) );
   _.assert( _.objectLike( o.src ) || _.longIs( o.src ) );
-  _.assert( _.arrayIs( o.src ),'not tested' );
+  _.assert( _.arrayIs( o.src ), 'not tested' );
 
   /* */
 
@@ -400,14 +402,14 @@ function entityGroup( o )
     {
       debugger;
       let r = o.usingOriginal ? Object.create( null ) : _.entityMakeConstructing( o.src );
-      result[ o.key[ k ] ] = groupForKey( o.key[ k ],r );
+      result[ o.key[ k ] ] = groupForKey( o.key[ k ], r );
     }
 
   }
   else
   {
     result = Object.create( null );
-    groupForKey( o.key,result );
+    groupForKey( o.key, result );
   }
 
   /**/
@@ -416,10 +418,10 @@ function entityGroup( o )
 
   /* */
 
-  function groupForKey( key,result )
+  function groupForKey( key, result )
   {
 
-    _.each( o.src, function( e,k )
+    _.each( o.src, function( e, k )
     {
 
       let value = o.usingOriginal ? o.src[ k ] : o.src[ k ][ key ];
