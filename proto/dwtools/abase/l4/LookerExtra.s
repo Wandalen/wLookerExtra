@@ -135,8 +135,6 @@ entityWrap.defaults =
  * @param {Function} onDown=function(){}
  * @param {Boolean} own=1
  * @param {Number} recursive=Infinity
- * @param {Boolean} returninDown= 0
- * @param {Boolean} usingExactPath= 0
  * @param {Boolean} searchingKey=1
  * @param {Boolean} searchingValue=1
  * @param {Boolean} searchingSubstring=1
@@ -159,18 +157,27 @@ entityWrap.defaults =
 
 function entitySearch( o )
 {
-  let result = Object.create( null );
+  let result;
 
   if( arguments.length === 2 )
   {
     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
   }
 
+  // debugger;
   _.mapSupplement( o, entitySearch.defaults );
   _.routineOptions( entitySearch, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( o.onDown.length === 0 || o.onDown.length === 3 );
   _.assert( o.onUp.length === 0 || o.onUp.length === 3 );
+  _.assert( _.longHas( [ 'src', 'it' ], o.returning ) );
+  // _.assert( _.longHas( [ 'src', 'down', 'it' ], o.returning ) );
+  // debugger;
+
+  if( o.returning === 'src' )
+  result = Object.create( null );
+  else
+  result = [];
 
   let strIns, regexpIns;
   strIns = String( o.ins );
@@ -196,34 +203,71 @@ function entitySearch( o )
 
   /* */
 
-  function checkCandidate( e, k, it, r, path )
+  function resultAdd()
   {
+    let it = this;
+    let e = it.src;
+    let path = it.path;
 
-    let c = true;
-    if( o.condition )
+    _.assert( arguments.length === 0 );
+
+    // if( o.returning === 'down' && it.down )
+    // {
+    //   e = it.down.src;
+    //   path = it.path;
+    //   // if( o.usingExactPath )
+    //   // path = it.down.path;
+    // }
+    // else
+    if( o.returning === 'it' )
     {
-      c = o.condition.call( this, e, k, it );
+      e = it;
     }
 
-    // logger.log( `checkCandidate ${path}` ); debugger;
+    if( o.returning === 'src' )
+    result[ path ] = e;
+    else
+    result.push( e );
+  }
 
-    if( !c )
-    return c;
+  /* */
+
+  // function compare( e, k, it, r, path )
+  function compare( e, k )
+  {
+
+    _.assert( arguments.length === 2 );
+
+    // let c = true;
+    if( o.condition )
+    {
+      if( !o.condition.call( this, e, k, it ) )
+      return false;
+    }
+
+    // logger.log( `compare ${path}` ); debugger;
+
+    // if( !c )
+    // return c;
 
     if( e === o.ins )
     {
-      result[ path ] = r;
+      // result[ path ] = r;
+      return true;
     }
     else if( regexpIns )
     {
       if( regexpIns.test( e ) )
-      result[ path ] = r;
+      return true;
+      // result[ path ] = r;
     }
     else if( o.searchingSubstring && _.strIs( e ) && e.indexOf( strIns ) !== -1 )
     {
-      result[ path ] = r;
+      // result[ path ] = r;
+      return true;
     }
 
+    return false;
   }
 
   /* */
@@ -231,33 +275,47 @@ function entitySearch( o )
   function handleUp( e, k, it )
   {
 
+    _.assert( arguments.length === 3 );
+
     if( onUp )
     if( onUp.call( this, e, k, it ) === false )
     return false;
 
-    let path = it.path;
-
-    let r;
-    if( o.returninDown && it.down )
-    {
-      r = it.down.src;
-      if( o.usingExactPath )
-      path = it.down.path;
-    }
-    else
-    {
-      r = e;
-    }
-
     if( o.searchingValue )
     {
-      checkCandidate.call( this, e, k, it, r, path );
+      if( compare.call( this, e, k ) )
+      resultAdd.call( this );
     }
 
     if( o.searchingKey )
     {
-      checkCandidate.call( this, it.key, k, it, r, path );
+      if( compare.call( this, it.key, k ) )
+      resultAdd.call( this );
     }
+
+    // let path = it.path;
+    // let r = e;
+
+    // if( o.returning === 'down' && it.down )
+    // {
+    //   r = it.down.src;
+    //   // if( o.usingExactPath )
+    //   // path = it.down.path;
+    // }
+    // else
+    // {
+    //   r = e;
+    // }
+
+    // if( o.searchingValue )
+    // {
+    //   compare.call( this, e, k, it, r, path );
+    // }
+    //
+    // if( o.searchingKey )
+    // {
+    //   compare.call( this, it.key, k, it, r, path );
+    // }
 
   }
 
@@ -276,8 +334,8 @@ entitySearch.defaults =
   own : 1,
   recursive : Infinity,
 
-  returninDown : 0,
-  usingExactPath : 0,
+  returning : 'src',
+  // usingExactPath : 0,
 
   searchingKey : 1,
   searchingValue : 1,

@@ -23,11 +23,82 @@ var _ = _global_.wTools;
 function entitySearch( test )
 {
 
-  test.case = 'trivial';
+  test.case = '2 arguments';
   var src = { a : 0, e : { d : 'something' } };
   var got = _.entitySearch( src, 'something' );
-  var expected = { '/e/d' : 'something' };
-  test.identical( got, expected );
+  var exp = { '/e/d' : 'something' };
+  test.identical( got, exp );
+
+  test.case = 'options map';
+  var src = { a : 0, e : { d : 'something' } };
+  var got = _.entitySearch({ src : src, ins : 'something' });
+  var exp = { '/e/d' : 'something' };
+  test.identical( got, exp );
+
+  test.case = 'returning : src';
+  var src = { a : 0, e : { d : 'something' } };
+  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  var exp = { '/e/d' : 'something' };
+  test.identical( got, exp );
+
+}
+
+//
+
+function entitySearchReturningSrc( test )
+{
+
+  test.case = 'trivial';
+  var src = { a : 0, e : { d : 'something' } };
+  var exp = { '/e/d' : 'something' };
+  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  test.contains( got, exp );
+
+}
+
+//
+
+function entitySearchReturningIt( test )
+{
+
+  test.case = 'trivial';
+  var src = { a : 0, e : { d : 'something' } };
+  var exp =
+  [
+    {
+      'childrenCounter' : 0,
+      'level' : 2,
+      'path' : '/e/d',
+      'key' : 'd',
+      'index' : 0,
+      'src' : 'something',
+      'continue' : true,
+      'ascending' : false,
+      'revisited' : false,
+      '_' : null,
+      'down' :
+      {
+        'childrenCounter' : 1,
+        'level' : 1,
+        'path' : '/e',
+        'key' : 'e',
+        'index' : 1,
+        'src' : src.e,
+        'continue' : true,
+        'ascending' : false,
+        'revisited' : false,
+        '_' : null,
+        'visiting' : true,
+        'iterable' : 'map-like',
+        'visitCounting' : true
+      },
+      'visiting' : true,
+      'iterable' : false,
+      'visitCounting' : true
+    }
+  ]
+  var got = _.entitySearch({ src : src, ins : 'something', returning : 'it' });
+  test.contains( got, exp );
 
 }
 
@@ -89,7 +160,6 @@ function entitySearchOptionPathJoin( test )
       result = selectorPath + defaultUpToken + _.strType( it.src ) + '::' + selectorName;
     }
 
-    debugger;
     return result;
   }
 
@@ -114,6 +184,8 @@ var Self =
   {
 
     entitySearch,
+    entitySearchReturningSrc,
+    entitySearchReturningIt,
     entitySearchOptionPathJoin,
 
   }
