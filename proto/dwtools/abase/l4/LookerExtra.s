@@ -164,15 +164,12 @@ function entitySearch( o )
     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
   }
 
-  // debugger;
   _.mapSupplement( o, entitySearch.defaults );
   _.routineOptions( entitySearch, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( o.onDown.length === 0 || o.onDown.length === 3 );
   _.assert( o.onUp.length === 0 || o.onUp.length === 3 );
   _.assert( _.longHas( [ 'src', 'it' ], o.returning ) );
-  // _.assert( _.longHas( [ 'src', 'down', 'it' ], o.returning ) );
-  // debugger;
 
   if( o.returning === 'src' )
   result = Object.create( null );
@@ -232,38 +229,28 @@ function entitySearch( o )
 
   /* */
 
-  // function compare( e, k, it, r, path )
   function compare( e, k )
   {
 
     _.assert( arguments.length === 2 );
 
-    // let c = true;
     if( o.condition )
     {
       if( !o.condition.call( this, e, k, it ) )
       return false;
     }
 
-    // logger.log( `compare ${path}` ); debugger;
-
-    // if( !c )
-    // return c;
-
     if( e === o.ins )
     {
-      // result[ path ] = r;
       return true;
     }
     else if( regexpIns )
     {
       if( regexpIns.test( e ) )
       return true;
-      // result[ path ] = r;
     }
     else if( o.searchingSubstring && _.strIs( e ) && e.indexOf( strIns ) !== -1 )
     {
-      // result[ path ] = r;
       return true;
     }
 
@@ -292,30 +279,6 @@ function entitySearch( o )
       if( compare.call( this, it.key, k ) )
       resultAdd.call( this );
     }
-
-    // let path = it.path;
-    // let r = e;
-
-    // if( o.returning === 'down' && it.down )
-    // {
-    //   r = it.down.src;
-    //   // if( o.usingExactPath )
-    //   // path = it.down.path;
-    // }
-    // else
-    // {
-    //   r = e;
-    // }
-
-    // if( o.searchingValue )
-    // {
-    //   compare.call( this, e, k, it, r, path );
-    // }
-    //
-    // if( o.searchingKey )
-    // {
-    //   compare.call( this, it.key, k, it, r, path );
-    // }
 
   }
 
