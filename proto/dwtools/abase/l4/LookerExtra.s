@@ -167,9 +167,28 @@ function entitySearch( o )
   _.mapSupplement( o, entitySearch.defaults );
   _.routineOptions( entitySearch, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( o.onDown.length === 0 || o.onDown.length === 3 );
-  _.assert( o.onUp.length === 0 || o.onUp.length === 3 );
   _.assert( _.longHas( [ 'src', 'it' ], o.returning ) );
+  _.assert( _.longHas( [ 'all', 'top-to-bottom' ], o.order ) );
+  // _.assert( _.longHas( [ 'once', 'serial' ], o.comparing ) );
+
+  // if( o.onValueForCompare === null )
+  // o.onValueForCompare = o.comparing === 'once' ? onValueForCompareOnceDefault : onValueForCompareSerialDefault;
+  // if( o.onKeyForCompare === null )
+  // o.onKeyForCompare = o.comparing === 'once' ? onKeyForCompareOnceDefault : onKeyForCompareSerialDefault;
+
+  if( o.onValueForCompare === null )
+  o.onValueForCompare = onValueForCompareOnceDefault;
+  if( o.onKeyForCompare === null )
+  o.onKeyForCompare = onKeyForCompareOnceDefault;
+
+  _.assert( o.onDown === null || o.onDown.length === 0 || o.onDown.length === 3 );
+  _.assert( o.onUp === null || o.onUp.length === 0 || o.onUp.length === 3 );
+
+  let iterationCompareAndAdd;
+  // if( o.comparing === 'once' )
+  iterationCompareAndAdd = iterationCompareAndAddOnce;
+  // else
+  // iterationCompareAndAdd = iterationCompareAndAddSerial;
 
   if( o.returning === 'src' )
   result = Object.create( null );
@@ -191,12 +210,76 @@ function entitySearch( o )
   /* */
 
   let onUp = o.onUp;
+  let onDown = o.onDown;
   let lookOptions = _.mapOnly( o, _.look.defaults )
   lookOptions.onUp = handleUp;
+  lookOptions.onDown = handleDown;
+  lookOptions.iteratorExtension = lookOptions.iteratorExtension || Object.create( null );
+  lookOptions.iteratorExtension.onValueForCompare = o.onValueForCompare;
+  lookOptions.iteratorExtension.onKeyForCompare = o.onKeyForCompare;
+  lookOptions.iteratorExtension.order = o.order;
+  lookOptions.iteratorExtension.comparing = o.comparing;
+  lookOptions.iterationExtension = lookOptions.iterationExtension || Object.create( null );
+  lookOptions.iterationExtension.added = null;
 
   _.look( lookOptions );
 
   return result;
+
+  /* */
+
+  function handleUp( e, k, it )
+  {
+
+    _.assert( arguments.length === 3 );
+
+    if( onUp )
+    {
+      let r = onUp.call( this, e, k, it );
+      _.assert( r === undefined );
+    }
+
+    if( !it.continue || !it.iterator.continue )
+    return;
+
+    if( it.order === 'top-to-bottom' )
+    return;
+
+    iterationCompareAndAdd.call( it );
+
+  }
+
+  /* */
+
+  function handleDown( e, k, it )
+  {
+
+    _.assert( arguments.length === 3 );
+
+    if( onDown )
+    {
+      let r = onDown.call( this, e, k, it );
+      _.assert( r === undefined );
+    }
+
+    if( !it.continue || !it.iterator.continue )
+    return end();
+
+    if( it.order === 'top-to-bottom' )
+    if( !it.added )
+    iterationCompareAndAdd.call( it );
+
+    return end();
+
+    function end()
+    {
+      if( it.added )
+      if( it.down )
+      {
+        it.down.added = true;
+      }
+    }
+  }
 
   /* */
 
@@ -206,16 +289,8 @@ function entitySearch( o )
     let e = it.src;
     let path = it.path;
 
-    _.assert( arguments.length === 0 );
+    _.assert( arguments.length === 0, 'Expects no arguments' );
 
-    // if( o.returning === 'down' && it.down )
-    // {
-    //   e = it.down.src;
-    //   path = it.path;
-    //   // if( o.usingExactPath )
-    //   // path = it.down.path;
-    // }
-    // else
     if( o.returning === 'it' )
     {
       e = it;
@@ -225,7 +300,74 @@ function entitySearch( o )
     result[ path ] = e;
     else
     result.push( e );
+
+    it.added = true;
+    if( it.order === 'top-to-bottom' )
+    it.continue = false;
+
   }
+
+  /* */
+
+  function iterationCompareAndAddOnce()
+  {
+    let it = this;
+    let e = it.src;
+    let k = it.key;
+
+    // if( _.strHas( it.path, 'comment' ) || _.strHas( it.path, 'Comment' ) )
+    // debugger;
+
+    if( o.searchingValue )
+    {
+      let value = it.onValueForCompare( e, k );
+      if( compare.call( this, value, k ) )
+      resultAdd.call( this );
+    }
+
+    if( o.searchingKey )
+    {
+      if( compare.call( this, it.onKeyForCompare( e, k ), k ) )
+      resultAdd.call( this );
+    }
+
+  }
+
+  // /* */
+  //
+  // function iterationCompareAndAddSerial()
+  // {
+  //   let it = this;
+  //   let e = it.src;
+  //   let k = it.key;
+  //
+  //   if( o.searchingValue )
+  //   {
+  //     let counter = 0;
+  //     let value = it.onValueForCompare( e, k, counter );
+  //     while( value !== undefined )
+  //     {
+  //       if( compare.call( this, value, k ) )
+  //       resultAdd.call( this );
+  //       else
+  //       value = it.onValueForCompare( e, k, counter );
+  //     }
+  //   }
+  //
+  //   if( o.searchingKey )
+  //   {
+  //     let counter = 0;
+  //     let value = it.onKeyForCompare( e, k, counter );
+  //     while( value !== undefined )
+  //     {
+  //       if( compare.call( this, value, k ) )
+  //       resultAdd.call( this );
+  //       else
+  //       value = it.onKeyForCompare( e, k, counter );
+  //     }
+  //   }
+  //
+  // }
 
   /* */
 
@@ -259,28 +401,35 @@ function entitySearch( o )
 
   /* */
 
-  function handleUp( e, k, it )
+  function onValueForCompareOnceDefault( e, k )
   {
-
-    _.assert( arguments.length === 3 );
-
-    if( onUp )
-    if( onUp.call( this, e, k, it ) === false )
-    return false;
-
-    if( o.searchingValue )
-    {
-      if( compare.call( this, e, k ) )
-      resultAdd.call( this );
-    }
-
-    if( o.searchingKey )
-    {
-      if( compare.call( this, it.key, k ) )
-      resultAdd.call( this );
-    }
-
+    return e;
   }
+
+  /* */
+
+  function onKeyForCompareOnceDefault( e, k )
+  {
+    return k;
+  }
+
+  /* */
+
+  // function onValueForCompareSerialDefault( e, k, counter )
+  // {
+  //   if( !counter )
+  //   return e;
+  // }
+  //
+  // /* */
+  //
+  // function onKeyForCompareSerialDefault( e, k )
+  // {
+  //   if( !counter )
+  //   return k;
+  // }
+
+  /* */
 
 }
 
@@ -291,12 +440,18 @@ entitySearch.defaults =
   ins : null,
   condition : null,
 
-  onUp : function(){},
-  onDown : function(){},
+  // onUp : function(){},
+  // onDown : function(){},
+  onUp : null,
+  onDown : null,
+  onValueForCompare : null,
+  onKeyForCompare : null,
 
   own : 1,
   recursive : Infinity,
 
+  order : 'all',
+  // comparing : 'once',
   returning : 'src',
   // usingExactPath : 0,
 

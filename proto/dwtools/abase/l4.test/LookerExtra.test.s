@@ -165,6 +165,488 @@ function entitySearchOptionPathJoin( test )
 
 }
 
+//
+
+function entitySearchMapFromObjectLoop( test )
+{
+  let ups = [];
+  let dws = [];
+  let structure =
+  {
+    a : 1,
+    obj1 : new Obj({ b : 2 }),
+  }
+  structure.obj1.itself = structure.obj1;
+
+  /* - */
+
+  test.case = 'basic';
+  clean();
+  var found = _.entitySearch
+  ({
+    src : structure,
+    ins : 2,
+    onUp,
+    onDown,
+  });
+  var exp =
+  {
+    '/obj1/b' : 2,
+  }
+  test.identical( found, exp );
+
+  var exp = [ '/', '/a', '/obj1', '/obj1/b', '/obj1/itself' ];
+  test.identical( ups, exp );
+  var exp = [ '/a', '/obj1/b', '/obj1/itself', '/obj1', '/' ];
+  test.identical( dws, exp );
+
+  /* - */
+
+  function Obj( src )
+  {
+    return _.mapExtend( this, src );
+  }
+
+  function clean()
+  {
+    ups.splice( 0, ups.length );
+    dws.splice( 0, dws.length );
+  }
+
+  function onUp( e, k, _it )
+  {
+    let it = this;
+
+    _.assert( arguments.length === 3 );
+    ups.push( it.path );
+
+    it.iterable = 'Node';
+    it.ascendAct = function nodeAscend( node )
+    {
+      if( !_.objectIs( node ) )
+      return;
+      let map = _.mapExtend( null, node );
+      this.revisitedEval( node );
+      return this._mapAscend( map );
+    }
+
+    it.revisitedEval( e );
+
+  }
+
+  function onDown( e, k, _it )
+  {
+    let it = this;
+
+    _.assert( arguments.length === 3 );
+    dws.push( it.path );
+
+  }
+
+}
+
+//
+
+function entitySearchMapTopToBottom( test )
+{
+  let ups = [];
+  let dws = [];
+  let structure =
+  {
+    el1 :
+    {
+      elements :
+      [
+        { el1 : { code : 'test' }, el2 : { code : '.' }, el3 : { code : 'setsAreIdentical' }, code : 'test.setsAreIdentical' },
+        { code : '( rel( _.mapKeys( map ) ), [] )' },
+      ],
+      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+    },
+    el2 : { code : ';' },
+    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    el3 :
+    {
+      code : 'test.setsAreIdentical = null;',
+    }
+  }
+
+  /* - */
+
+  test.case = 'basic';
+  clean();
+  var found = _.entitySearch
+  ({
+    src : structure,
+    ins : 'st.setsAreIdent',
+    order : 'top-to-bottom',
+    onUp,
+    onDown,
+  });
+  var exp =
+  {
+    '/el1/elements/0/code' : 'test.setsAreIdentical',
+    '/el1/code' : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+    '/code' : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    '/el3/code' : 'test.setsAreIdentical = null;'
+  }
+  test.identical( found, exp );
+
+  var exp =
+  [
+    '/',
+    '/el1',
+    '/el1/elements',
+    '/el1/elements/0',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/code',
+    '/el1/elements/1',
+    '/el1/elements/1/code',
+    '/el1/code',
+    '/el2',
+    '/el2/code',
+    '/code',
+    '/el3',
+    '/el3/code'
+  ]
+  test.identical( ups, exp );
+  var exp =
+  [
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/code',
+    '/el1/elements/0',
+    '/el1/elements/1/code',
+    '/el1/elements/1',
+    '/el1/elements',
+    '/el1/code',
+    '/el1',
+    '/el2/code',
+    '/el2',
+    '/code',
+    '/el3/code',
+    '/el3',
+    '/'
+  ]
+  test.identical( dws, exp );
+
+  /* - */
+
+  function clean()
+  {
+    ups.splice( 0, ups.length );
+    dws.splice( 0, dws.length );
+  }
+
+  function onUp( e, k, _it )
+  {
+    let it = this;
+    ups.push( it.path );
+  }
+
+  function onDown( e, k, _it )
+  {
+    let it = this;
+    dws.push( it.path );
+  }
+
+}
+
+entitySearchMapTopToBottom.description =
+`
+- top to down order adds leafs first, then branches, then the root
+`
+
+//
+
+function entitySearchMapTopToBottomWithOnUp( test )
+{
+  let ups = [];
+  let dws = [];
+  let structure =
+  {
+    el1 :
+    {
+      notCode1 : 'test.setsAreIdentical',
+      elements :
+      [
+        { el1 : { code : 'test' }, el2 : { code : '.' }, el3 : { code : 'setsAreIdentical' }, code : 'test.setsAreIdentical' },
+        { code : '( rel( _.mapKeys( map ) ), [] )' },
+      ],
+      notCode2 : 'test.setsAreIdentical',
+      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+    },
+    el2 : { code : ';' },
+    el3 :
+    {
+      code : 'test.setsAreIdentical = null;',
+    },
+    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+  }
+
+  /* - */
+
+  test.case = 'basic';
+  clean();
+  var found = _.entitySearch
+  ({
+    src : structure,
+    ins : 'st.setsAreIdent',
+    order : 'top-to-bottom',
+    onUp,
+    onDown,
+  });
+  var exp =
+  {
+    '/el1/notCode1' : 'test.setsAreIdentical',
+    '/el1/elements/0/code' : 'test.setsAreIdentical',
+    '/el1/notCode2' : 'test.setsAreIdentical',
+    '/el3/code' : 'test.setsAreIdentical = null;'
+  }
+  test.identical( found, exp );
+
+  var exp =
+  [
+    '/',
+    '/el1',
+    '/el1/notCode1',
+    '/el1/elements',
+    '/el1/elements/0',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/code',
+    '/el1/elements/1',
+    '/el1/elements/1/code',
+    '/el1/notCode2',
+    '/el1/code',
+    '/el2',
+    '/el2/code',
+    '/el3',
+    '/el3/code',
+    '/code'
+  ]
+  test.identical( ups, exp );
+  var exp =
+  [
+    '/el1/notCode1',
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/code',
+    '/el1/elements/0',
+    '/el1/elements/1/code',
+    '/el1/elements/1',
+    '/el1/elements',
+    '/el1/notCode2',
+    '/el1/code',
+    '/el1',
+    '/el2/code',
+    '/el2',
+    '/el3/code',
+    '/el3',
+    '/code',
+    '/'
+  ]
+  test.identical( dws, exp );
+
+  /* - */
+
+  function clean()
+  {
+    ups.splice( 0, ups.length );
+    dws.splice( 0, dws.length );
+  }
+
+  function onUp( e, k, _it )
+  {
+    let it = this;
+    ups.push( it.path );
+    if( k === 'code' )
+    if( it.down.added )
+    it.continue = false;
+  }
+
+  function onDown( e, k, _it )
+  {
+    let it = this;
+    dws.push( it.path );
+  }
+
+}
+
+entitySearchMapTopToBottomWithOnUp.description =
+`
+- top to down order adds leafs first, then branches, then the root
+- if descendant was added then ascendant's code field is ignored
+- could not work if field code goes not the last
+`
+
+//
+
+function entitySearchMapTopToBottomWithOnAscend( test )
+{
+  let ups = [];
+  let dws = [];
+  let structure =
+  {
+    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    el1 :
+    {
+      notCode1 : 'test.setsAreIdentical',
+      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+      elements :
+      [
+        {
+          code : 'test.setsAreIdentical',
+          el1 : { code : 'test' },
+          el2 : { code : '.' },
+          el3 : { code : 'setsAreIdentical' },
+        },
+        { code : '( rel( _.mapKeys( map ) ), [] )' },
+      ],
+      notCode2 : 'test.setsAreIdentical',
+    },
+    el2 : { code : ';' },
+    el3 :
+    {
+      code : 'test.setsAreIdentical = null;',
+    },
+  }
+
+  /* - */
+
+  test.case = 'basic';
+  clean();
+  var found = _.entitySearch
+  ({
+    src : structure,
+    ins : 'st.setsAreIdent',
+    order : 'top-to-bottom',
+    onUp,
+    onDown,
+    onAscend,
+  });
+  var exp =
+  {
+    '/el1/notCode1' : 'test.setsAreIdentical',
+    '/el1/elements/0/code' : 'test.setsAreIdentical',
+    '/el1/notCode2' : 'test.setsAreIdentical',
+    '/el3/code' : 'test.setsAreIdentical = null;'
+  }
+  test.identical( found, exp );
+
+  var exp =
+  [
+    '/',
+    '/el1',
+    '/el1/notCode1',
+    '/el1/elements',
+    '/el1/elements/0',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/code',
+    '/el1/elements/1',
+    '/el1/elements/1/code',
+    '/el1/notCode2',
+    '/el1/code',
+    '/el2',
+    '/el2/code',
+    '/el3',
+    '/el3/code',
+    '/code'
+  ]
+  test.identical( ups, exp );
+  var exp =
+  [
+    '/el1/notCode1',
+    '/el1/elements/0/el1/code',
+    '/el1/elements/0/el1',
+    '/el1/elements/0/el2/code',
+    '/el1/elements/0/el2',
+    '/el1/elements/0/el3/code',
+    '/el1/elements/0/el3',
+    '/el1/elements/0/code',
+    '/el1/elements/0',
+    '/el1/elements/1/code',
+    '/el1/elements/1',
+    '/el1/elements',
+    '/el1/notCode2',
+    '/el1/code',
+    '/el1',
+    '/el2/code',
+    '/el2',
+    '/el3/code',
+    '/el3',
+    '/code',
+    '/'
+  ]
+  test.identical( dws, exp );
+
+  /* - */
+
+  function clean()
+  {
+    ups.splice( 0, ups.length );
+    dws.splice( 0, dws.length );
+  }
+
+  function onUp( e, k, _it )
+  {
+    let it = this;
+    ups.push( it.path );
+    if( k === 'code' )
+    if( it.down.added )
+    it.continue = false;
+  }
+
+  function onDown( e, k, _it )
+  {
+    let it = this;
+    dws.push( it.path );
+  }
+
+  function onAscend()
+  {
+    let it = this;
+    _.assert( arguments.length === 0, 'Expects no arguments' );
+    let src = it.src;
+    if( _.mapIs( src ) )
+    {
+      src = _.mapBut( src, { code : null } );
+      if( it.src.code !== undefined )
+      src.code = it.src.code;
+    }
+    return it.ascendAct( src );
+  }
+
+}
+
+entitySearchMapTopToBottomWithOnAscend.description =
+`
+- top to down order adds leafs first, then branches, then the root
+- if descendant was added then ascendant's code field is ignored
+- work even if field code is not the last
+`
+
 // --
 // declare
 // --
@@ -187,6 +669,11 @@ var Self =
     entitySearchReturningSrc,
     entitySearchReturningIt,
     entitySearchOptionPathJoin,
+
+    entitySearchMapFromObjectLoop,
+    entitySearchMapTopToBottom,
+    entitySearchMapTopToBottomWithOnUp,
+    entitySearchMapTopToBottomWithOnAscend,
 
   }
 
