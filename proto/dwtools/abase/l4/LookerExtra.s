@@ -13,7 +13,7 @@
 
 /**
  * Collection of light-weight routines to traverse complex data structure.
-  @namespace Tools( module::LookerExtra )
+  @namespace Tools.LookerExtra 
   @memberof module:Tools/base/LookerExtra
 */
 
