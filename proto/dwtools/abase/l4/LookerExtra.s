@@ -44,7 +44,8 @@ _.assert( !!_realGlobal_ );
  * @param {Object} o Options map.
  *
  * @function entityWrap
- * @memberofs "module:Tools/base/LookerExtra","namespace:wTools"
+ * @namespace Tools
+ * @module Tools/base/LookerExtra
  */
 
 function entityWrap( o )
@@ -150,7 +151,8 @@ entityWrap.defaults =
  * _.entitySearch({ a : { b : 1, c : 2 }  }, 2 ) // { '/a/c' : 2}
  *
  * @function entitySearch
- * @memberofs "module:Tools/base/LookerExtra","namespace:wTools"
+ * @namespace Tools
+ * @module Tools/base/LookerExtra
  */
 
 function entitySearch( o )
@@ -475,7 +477,8 @@ entitySearch.defaults.__proto__ = _.look.defaults;
  * console.log( src.a )//1
  *
  * @function entityFreezeRecursive
- * @memberofs "module:Tools/base/LookerExtra","namespace:wTools"
+ * @namespace Tools
+ * @module Tools/base/LookerExtra
  */
 
 function entityFreezeRecursive( src )
@@ -534,7 +537,8 @@ function entityFreezeRecursive( src )
    * @throws {exception} If( arguments.length ) is not equal 1.
    * @throws {exception} If( o.key ) is not a Array or String.
    * @throws {exception} If( o.src ) is not a Array-like or Object-like.
-   * @memberofs "module:Tools/base/LookerExtra","namespace:wTools"
+   * @namespace Tools
+ * @module Tools/base/LookerExtra
    */
 
 function entityGroup( o )
