@@ -128,8 +128,8 @@ entityWrap.defaults =
  *
  * @param {Object} o Options map
  * @param {Object|Array} o.src Source entity
- * @param {} o.ins Entity to find. It can be a value of element, name of the property or index of the element.
- * @param {} condition=null
+ * @param {*} o.ins Entity to find. It can be a value of element, name of the property or index of the element.
+ * @param {*} condition=null
  * @param {Function} onUp=function(){}
  * @param {Function} onDown=function(){}
  * @param {Boolean} own=1
@@ -468,7 +468,7 @@ entitySearch.defaults.__proto__ = _.look.defaults;
 
 /**
  * @summary Recursively freezes properties/elements of an entity( src ). Frozen enity can't be changed.
- * @param {} src Source entity.
+ * @param {*} src Source entity.
  *
  * @example
  * let src = { a : 1 };
