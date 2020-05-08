@@ -31,9 +31,9 @@ module:
         - wResolver
         - complex data structure
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@willbe.so>
+      author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wlookerextra
       npm.scripts:
         test: wtest .run proto/**
@@ -828,9 +828,9 @@ module:
         - wResolver
         - complex data structure
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@willbe.so>
+      author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wlookerextra
       npm.scripts:
         test: wtest .run proto/**
