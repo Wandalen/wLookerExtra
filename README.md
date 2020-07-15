@@ -6,7 +6,7 @@ Collection of light-weight routines to traverse complex data structure. LookerEx
 ## Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```
 
 
