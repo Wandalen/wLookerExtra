@@ -654,7 +654,7 @@ entitySearchMapTopToBottomWithOnAscend.description =
 let Self =
 {
 
-  name : 'Tools.base.l4.LookerExtra',
+  name : 'Tools.l4.LookerExtra',
   silencing : 1,
   enabled : 1,
 
