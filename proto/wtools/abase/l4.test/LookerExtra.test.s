@@ -63,42 +63,30 @@ function entitySearchReturningIt( test )
 
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
-  var exp =
-  [
-    {
-      'childrenCounter' : 0,
-      'level' : 2,
-      'path' : '/e/d',
-      'key' : 'd',
-      'index' : 0,
-      'src' : 'something',
-      'continue' : true,
-      'ascending' : false,
-      'revisited' : false,
-      '_' : null,
-      'down' :
-      {
-        'childrenCounter' : 1,
-        'level' : 1,
-        'path' : '/e',
-        'key' : 'e',
-        'index' : 1,
-        'src' : src.e,
-        'continue' : true,
-        'ascending' : false,
-        'revisited' : false,
-        '_' : null,
-        'visiting' : true,
-        'iterable' : 'map-like',
-        'visitCounting' : true
-      },
-      'visiting' : true,
-      'iterable' : false,
-      'visitCounting' : true
-    }
-  ]
   var got = _.entitySearch({ src : src, ins : 'something', returning : 'it' });
-  test.contains( got, exp );
+  test.identical( got[ 0 ].path, '/e/d' );
+
+  var exp =
+  {
+    'childrenCounter' : 0,
+    'level' : 2,
+    'path' : '/e/d',
+    'key' : 'd',
+    'index' : 0,
+    'containerType' : null,
+    'src' : 'something',
+    'srcEffective' : 'something',
+    'continue' : true,
+    'ascending' : false,
+    'ascendAct' : got[ 0 ].ascendAct,
+    'revisited' : false,
+    '_' : null,
+    'visiting' : true,
+    'iterable' : 0,
+    'visitCounting' : true,
+    'added' : true
+  }
+  test.contains( got[ 0 ], exp );
 
 }
 
@@ -132,7 +120,7 @@ function entitySearchOptionPathJoin( test )
   {
     '/String::str' : 'str',
     '/Object::map/String::m3' : 'str',
-    '/Map::hash/String::m3' : 'str',
+    '/HashMap::hash/String::m3' : 'str',
   }
   test.identical( found, exp );
 
