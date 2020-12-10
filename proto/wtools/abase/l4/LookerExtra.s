@@ -101,7 +101,7 @@ function entityWrap( o )
   _.look
   ({
     src : o.dst,
-    own : o.own,
+    onlyOwn : o.own,
     levels : o.levels,
     onDown : handleDown,
   });
@@ -115,7 +115,7 @@ entityWrap.defaults =
   onCondition : null,
   onWrap : null,
   dst : null,
-  own : 1,
+  onlyOwn : 1,
   levels : 256,
 
 }
@@ -446,7 +446,7 @@ entitySearch.defaults =
   onValueForCompare : null,
   onKeyForCompare : null,
 
-  own : 1,
+  onlyOwn : 1,
   recursive : Infinity,
 
   order : 'all',
