@@ -1,4 +1,5 @@
-( function _LookerExtra_test_s_() {
+( function _LookerExtra_test_s_()
+{
 
 'use strict';
 
@@ -31,13 +32,13 @@ function entitySearch( test )
 
   test.case = 'options map';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src : src, ins : 'something' });
+  var got = _.entitySearch({ src, ins : 'something' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
   test.case = 'returning : src';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
@@ -51,7 +52,7 @@ function entitySearchReturningSrc( test )
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
   var exp = { '/e/d' : 'something' };
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
   test.contains( got, exp );
 
 }
@@ -63,7 +64,7 @@ function entitySearchReturningIt( test )
 
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'it' });
+  var got = _.entitySearch({ src, ins : 'something', returning : 'it' });
   test.identical( got[ 0 ].path, '/e/d' );
 
   var exp =
@@ -114,7 +115,7 @@ function entitySearchOptionPathJoin( test )
   ({
     src : structure,
     ins : 'str',
-    onPathJoin : onPathJoin,
+    onPathJoin,
   });
   var exp =
   {
@@ -132,8 +133,13 @@ function entitySearchOptionPathJoin( test )
     dws.splice( 0, dws.length );
   }
 
-  function onPathJoin( selectorPath, upToken, defaultUpToken, selectorName )
+  function onPathJoin( /* selectorPath, upToken, defaultUpToken, selectorName */ )
   {
+    let selectorPath = arguments[ 0 ];
+    let upToken = arguments[ 1 ];
+    let defaultUpToken = arguments[ 2 ];
+    let selectorName = arguments[ 3 ];
+
     let it = this;
     let result;
 
