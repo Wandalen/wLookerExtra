@@ -1,4 +1,5 @@
-( function _LookerExtra_test_s_() {
+( function _LookerExtra_test_s_()
+{
 
 'use strict';
 
@@ -31,13 +32,13 @@ function entitySearch( test )
 
   test.case = 'options map';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src : src, ins : 'something' });
+  var got = _.entitySearch({ src, ins : 'something' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
   test.case = 'returning : src';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
@@ -51,7 +52,7 @@ function entitySearchReturningSrc( test )
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
   var exp = { '/e/d' : 'something' };
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'src' });
+  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
   test.contains( got, exp );
 
 }
@@ -63,42 +64,30 @@ function entitySearchReturningIt( test )
 
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
+  var got = _.entitySearch({ src, ins : 'something', returning : 'it' });
+  test.identical( got[ 0 ].path, '/e/d' );
+
   var exp =
-  [
-    {
-      'childrenCounter' : 0,
-      'level' : 2,
-      'path' : '/e/d',
-      'key' : 'd',
-      'index' : 0,
-      'src' : 'something',
-      'continue' : true,
-      'ascending' : false,
-      'revisited' : false,
-      '_' : null,
-      'down' :
-      {
-        'childrenCounter' : 1,
-        'level' : 1,
-        'path' : '/e',
-        'key' : 'e',
-        'index' : 1,
-        'src' : src.e,
-        'continue' : true,
-        'ascending' : false,
-        'revisited' : false,
-        '_' : null,
-        'visiting' : true,
-        'iterable' : 'map-like',
-        'visitCounting' : true
-      },
-      'visiting' : true,
-      'iterable' : false,
-      'visitCounting' : true
-    }
-  ]
-  var got = _.entitySearch({ src : src, ins : 'something', returning : 'it' });
-  test.contains( got, exp );
+  {
+    'childrenCounter' : 0,
+    'level' : 2,
+    'path' : '/e/d',
+    'key' : 'd',
+    'index' : 0,
+    'containerType' : null,
+    'src' : 'something',
+    'srcEffective' : 'something',
+    'continue' : true,
+    'ascending' : false,
+    'ascendAct' : got[ 0 ].ascendAct,
+    'revisited' : false,
+    '_' : null,
+    'visiting' : true,
+    'iterable' : 0,
+    'visitCounting' : true,
+    'added' : true
+  }
+  test.contains( got[ 0 ], exp );
 
 }
 
@@ -126,13 +115,13 @@ function entitySearchOptionPathJoin( test )
   ({
     src : structure,
     ins : 'str',
-    onPathJoin : onPathJoin,
+    onPathJoin,
   });
   var exp =
   {
     '/String::str' : 'str',
     '/Object::map/String::m3' : 'str',
-    '/Map::hash/String::m3' : 'str',
+    '/HashMap::hash/String::m3' : 'str',
   }
   test.identical( found, exp );
 
@@ -144,8 +133,13 @@ function entitySearchOptionPathJoin( test )
     dws.splice( 0, dws.length );
   }
 
-  function onPathJoin( selectorPath, upToken, defaultUpToken, selectorName )
+  function onPathJoin( /* selectorPath, upToken, defaultUpToken, selectorName */ )
   {
+    let selectorPath = arguments[ 0 ];
+    let upToken = arguments[ 1 ];
+    let defaultUpToken = arguments[ 2 ];
+    let selectorName = arguments[ 3 ];
+
     let it = this;
     let result;
 

@@ -1,6 +1,6 @@
 {
   "name" : "wlookerextra",
-  "version" : "0.3.158",
+  "version" : "0.3.178",
   "description" : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
@@ -17,6 +17,6 @@
     "url" : "https://github.com/Wandalen/wLookerExtra/issues"
   },
   "dependencies" : { "wTools" : "alpha" },
-  "devDependencies" : { "wTesting" : "alpha" },
+  "devDependencies" : { "wlookerextra" : "file:.", "eslint" : "7.1.0", "wTesting" : "alpha" },
   "keywords" : [ "wTools" ]
 }

@@ -1,4 +1,5 @@
-( function _LookerExtra_s_() {
+( function _LookerExtra_s_()
+{
 
 'use strict';
 
@@ -101,7 +102,7 @@ function entityWrap( o )
   _.look
   ({
     src : o.dst,
-    own : o.own,
+    onlyOwn : o.own,
     levels : o.levels,
     onDown : handleDown,
   });
@@ -115,7 +116,7 @@ entityWrap.defaults =
   onCondition : null,
   onWrap : null,
   dst : null,
-  own : 1,
+  onlyOwn : 1,
   levels : 256,
 
 }
@@ -446,7 +447,7 @@ entitySearch.defaults =
   onValueForCompare : null,
   onKeyForCompare : null,
 
-  own : 1,
+  onlyOwn : 1,
   recursive : Infinity,
 
   order : 'all',
@@ -461,7 +462,8 @@ entitySearch.defaults =
 
 }
 
-entitySearch.defaults.__proto__ = _.look.defaults;
+// entitySearch.defaults.__proto__ = _.look.defaults;
+Object.setPrototypeOf( entitySearch.defaults, _.look.defaults );
 
 //
 
@@ -501,7 +503,7 @@ function entityFreezeRecursive( src )
 
 //
 
-  /**
+/**
    * Groups elements of entities from array( src ) into the object with key( o.key )
    * that contains array of values that corresponds to key( o.key ) from that entities.
    * If function cant find key( o.key ) it replaces key value with undefined.
