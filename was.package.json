@@ -16,7 +16,7 @@
   {
     "url" : "https://github.com/Wandalen/wLookerExtra/issues"
   },
-  "dependencies" : { "wTools" : "" },
+  "dependencies" : { "wTools" : "", "wlooker" : "" },
   "devDependencies" : { "wTesting" : "", "wlookerextra" : "file:.", "eslint" : "7.1.0" },
   "keywords" : [ "wTools" ]
 }
