@@ -8,7 +8,7 @@ Collection of light-weight routines to traverse complex data structure. LookerEx
 git clone https://github.com/Wandalen/wLookerExtra
 cd wLookerExtra
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project
