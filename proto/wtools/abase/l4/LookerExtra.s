@@ -580,7 +580,7 @@ function entityGroup( o )
     for( let k = 0 ; k < o.key.length ; k++ )
     {
       debugger;
-      let r = o.usingOriginal ? Object.create( null ) : _.entity.makeConstructing( o.src );
+      let r = o.usingOriginal ? Object.create( null ) : _.entity.shallowClone( o.src );
       result[ o.key[ k ] ] = groupForKey( o.key[ k ], r );
     }
 
