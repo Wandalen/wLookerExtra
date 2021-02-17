@@ -120,7 +120,7 @@ function entitySearchOptionPathJoin( test )
   var exp =
   {
     '/String::str' : 'str',
-    '/Object::map/String::m3' : 'str',
+    '/Map.polluted::map/String::m3' : 'str',
     '/HashMap::hash/String::m3' : 'str',
   }
   test.identical( found, exp );
