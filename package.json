@@ -1,6 +1,6 @@
 {
   "name": "wlookerextra",
-  "version": "0.3.193",
+  "version": "0.3.194",
   "description": "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
   "license": "MIT",
