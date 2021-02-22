@@ -72,7 +72,7 @@ function entitySearchReturningIt( test )
     'path' : '/e/d',
     'key' : 'd',
     'index' : 0,
-    'containerType' : null,
+    // 'containerType' : null,
     'src' : 'something',
     'srcEffective' : 'something',
     'continue' : true,
