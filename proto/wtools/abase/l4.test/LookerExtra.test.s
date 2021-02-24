@@ -14,6 +14,7 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
+let Parent = _.Looker;
 
 // --
 // tests
@@ -24,19 +25,19 @@ function entitySearch( test )
 
   test.case = '2 arguments';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch( src, 'something' );
+  var got = _.entity.search( src, 'something' );
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
   test.case = 'options map';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src, ins : 'something' });
+  var got = _.entity.search({ src, ins : 'something' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
   test.case = 'returning : src';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
+  var got = _.entity.search({ src, ins : 'something', returning : 'src' });
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
@@ -50,7 +51,7 @@ function entitySearchReturningSrc( test )
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
   var exp = { '/e/d' : 'something' };
-  var got = _.entitySearch({ src, ins : 'something', returning : 'src' });
+  var got = _.entity.search({ src, ins : 'something', returning : 'src' });
   test.contains( got, exp );
 
 }
@@ -62,7 +63,7 @@ function entitySearchReturningIt( test )
 
   test.case = 'trivial';
   var src = { a : 0, e : { d : 'something' } };
-  var got = _.entitySearch({ src, ins : 'something', returning : 'it' });
+  var got = _.entity.search({ src, ins : 'something', returning : 'it' });
   test.identical( got[ 0 ].path, '/e/d' );
 
   var exp =
@@ -109,7 +110,7 @@ function entitySearchOptionPathJoin( test )
 
   test.case = 'basic';
   clean();
-  var found = _.entitySearch
+  var found = _.entity.search
   ({
     src : structure,
     ins : 'str',
@@ -174,7 +175,7 @@ function entitySearchMapFromObjectLoop( test )
 
   test.case = 'basic';
   clean();
-  var found = _.entitySearch
+  var found = _.entity.search
   ({
     src : structure,
     ins : 2,
@@ -266,7 +267,7 @@ function entitySearchMapTopToBottom( test )
 
   test.case = 'basic';
   clean();
-  var found = _.entitySearch
+  var found = _.entity.search
   ({
     src : structure,
     ins : 'st.setsAreIdent',
@@ -388,7 +389,7 @@ function entitySearchMapTopToBottomWithOnUp( test )
 
   test.case = 'basic';
   clean();
-  var found = _.entitySearch
+  var found = _.entity.search
   ({
     src : structure,
     ins : 'st.setsAreIdent',
@@ -524,7 +525,7 @@ function entitySearchMapTopToBottomWithOnAscend( test )
 
   test.case = 'basic';
   clean();
-  var found = _.entitySearch
+  var found = _.entity.search
   ({
     src : structure,
     ins : 'st.setsAreIdent',

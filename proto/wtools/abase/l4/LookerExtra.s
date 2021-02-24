@@ -26,15 +26,70 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-let Self = _global_.wTools;
 let _ = _global_.wTools;
-
-let _ArraySlice = Array.prototype.slice;
-let _FunctionBind = Function.prototype.bind;
-let _ObjectToString = Object.prototype.toString;
-let _ObjectHasOwnProperty = Object.hasOwnProperty;
+_.searcher = _.searcher || Object.create( null );
 
 _.assert( !!_realGlobal_ );
+
+// --
+// declare looker
+// --
+
+let Defaults =
+{
+
+  ... _.looker.look.defaults,
+
+  src : null,
+  ins : null,
+  condition : null,
+
+  onUp : null,
+  onDown : null,
+  onValueForCompare : null,
+  onKeyForCompare : null,
+
+  onlyOwn : 1,
+  recursive : Infinity,
+
+  order : 'all',
+  returning : 'src',
+
+  searchingKey : 1,
+  searchingValue : 1,
+  searchingSubstring : 1,
+  searchingCaseInsensitive : 0,
+
+}
+
+let Looker =
+{
+}
+
+let Iterator =
+{
+}
+
+let Iteration =
+{
+  added : null,
+}
+
+let IterationPreserve =
+{
+}
+
+let Searcher = _.looker.make
+({
+  name : 'Searcher',
+  parent : _.Resolver,
+  looker : Looker,
+  iterator : Iterator,
+  iteration : Iteration,
+  iterationPreserve : IterationPreserve,
+});
+
+const Self = Searcher;
 
 // --
 // each
@@ -43,18 +98,18 @@ _.assert( !!_realGlobal_ );
 /**
  * @param {Object} o Options map.
  *
- * @function entityWrap
+ * @function wrap
  * @namespace Tools
  * @module Tools/base/LookerExtra
  */
 
-function entityWrap( o )
+function wrap( o )
 {
   let result = o.dst;
 
   debugger;
 
-  _.routineOptions( entityWrap, o );
+  _.routineOptions( wrap, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.onCondition )
@@ -110,7 +165,7 @@ function entityWrap( o )
   return result;
 }
 
-entityWrap.defaults =
+wrap.defaults =
 {
 
   onCondition : null,
@@ -142,20 +197,20 @@ entityWrap.defaults =
  * @returns {Object} Returns map with paths to found elements and their values.
  *
  * @example
- * _.entitySearch({ a : 1, b : 2, c : 1 }, 1 ); // { '/a : 1', '/c' : 1}
+ * _.search({ a : 1, b : 2, c : 1 }, 1 ); // { '/a : 1', '/c' : 1}
  *
  * @example
- * _.entitySearch({ a : 1, b : 2, c : 1 }, 'a' ); // { '/a' : 1 }
+ * _.search({ a : 1, b : 2, c : 1 }, 'a' ); // { '/a' : 1 }
  *
  * @example
- * _.entitySearch({ a : { b : 1, c : 2 }  }, 2 ) // { '/a/c' : 2}
+ * _.search({ a : { b : 1, c : 2 }  }, 2 ) // { '/a/c' : 2}
  *
- * @function entitySearch
+ * @function search
  * @namespace Tools
  * @module Tools/base/LookerExtra
  */
 
-function entitySearch( o )
+function search( o )
 {
   let result;
 
@@ -164,17 +219,11 @@ function entitySearch( o )
     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
   }
 
-  _.mapSupplement( o, entitySearch.defaults );
-  _.routineOptions( entitySearch, o );
+  _.mapSupplement( o, search.defaults );
+  _.routineOptions( search, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.longHas( [ 'src', 'it' ], o.returning ) );
   _.assert( _.longHas( [ 'all', 'top-to-bottom' ], o.order ) );
-  // _.assert( _.longHas( [ 'once', 'serial' ], o.comparing ) );
-
-  // if( o.onValueForCompare === null )
-  // o.onValueForCompare = o.comparing === 'once' ? onValueForCompareOnceDefault : onValueForCompareSerialDefault;
-  // if( o.onKeyForCompare === null )
-  // o.onKeyForCompare = o.comparing === 'once' ? onKeyForCompareOnceDefault : onKeyForCompareSerialDefault;
 
   if( o.onValueForCompare === null )
   o.onValueForCompare = onValueForCompareOnceDefault;
@@ -185,10 +234,7 @@ function entitySearch( o )
   _.assert( o.onUp === null || o.onUp.length === 0 || o.onUp.length === 3 );
 
   let iterationCompareAndAdd;
-  // if( o.comparing === 'once' )
   iterationCompareAndAdd = iterationCompareAndAddOnce;
-  // else
-  // iterationCompareAndAdd = iterationCompareAndAddSerial;
 
   if( o.returning === 'src' )
   result = Object.create( null );
@@ -211,18 +257,24 @@ function entitySearch( o )
 
   let onUp = o.onUp;
   let onDown = o.onDown;
-  let lookOptions = _.mapOnly( o, _.look.defaults )
+  // let lookOptions = _.mapOnly( o, _.look.defaults )
+  let lookOptions = o;
   lookOptions.onUp = handleUp;
   lookOptions.onDown = handleDown;
-  lookOptions.iteratorExtension = lookOptions.iteratorExtension || Object.create( null );
-  lookOptions.iteratorExtension.onValueForCompare = o.onValueForCompare;
-  lookOptions.iteratorExtension.onKeyForCompare = o.onKeyForCompare;
-  lookOptions.iteratorExtension.order = o.order;
-  lookOptions.iteratorExtension.comparing = o.comparing;
-  lookOptions.iterationExtension = lookOptions.iterationExtension || Object.create( null );
-  lookOptions.iterationExtension.added = null;
+  // lookOptions.iteratorExtension = lookOptions.iteratorExtension || Object.create( null );
+  // lookOptions.iteratorExtension.onValueForCompare = o.onValueForCompare;
+  // lookOptions.iteratorExtension.onKeyForCompare = o.onKeyForCompare;
+  // lookOptions.iteratorExtension.order = o.order;
+  // lookOptions.iteratorExtension.comparing = o.comparing;
+  // lookOptions.iterationExtension = lookOptions.iterationExtension || Object.create( null );
+  // lookOptions.iterationExtension.added = null;
 
-  _.look( lookOptions );
+  if( !o.Looker )
+  o.Looker = Self;
+
+  let it = o.Looker.head( search, [ lookOptions ] );
+
+  it.start();
 
   return result;
 
@@ -315,11 +367,9 @@ function entitySearch( o )
     let e = it.src;
     let k = it.key;
 
-    // if( _.strHas( it.path, 'comment' ) || _.strHas( it.path, 'Comment' ) )
-    // debugger;
-
     if( o.searchingValue )
     {
+      debugger;
       let value = it.onValueForCompare( e, k );
       if( compare.call( this, value, k ) )
       resultAdd.call( this );
@@ -332,42 +382,6 @@ function entitySearch( o )
     }
 
   }
-
-  // /* */
-  //
-  // function iterationCompareAndAddSerial()
-  // {
-  //   let it = this;
-  //   let e = it.src;
-  //   let k = it.key;
-  //
-  //   if( o.searchingValue )
-  //   {
-  //     let counter = 0;
-  //     let value = it.onValueForCompare( e, k, counter );
-  //     while( value !== undefined )
-  //     {
-  //       if( compare.call( this, value, k ) )
-  //       resultAdd.call( this );
-  //       else
-  //       value = it.onValueForCompare( e, k, counter );
-  //     }
-  //   }
-  //
-  //   if( o.searchingKey )
-  //   {
-  //     let counter = 0;
-  //     let value = it.onKeyForCompare( e, k, counter );
-  //     while( value !== undefined )
-  //     {
-  //       if( compare.call( this, value, k ) )
-  //       resultAdd.call( this );
-  //       else
-  //       value = it.onKeyForCompare( e, k, counter );
-  //     }
-  //   }
-  //
-  // }
 
   /* */
 
@@ -415,55 +429,35 @@ function entitySearch( o )
 
   /* */
 
-  // function onValueForCompareSerialDefault( e, k, counter )
-  // {
-  //   if( !counter )
-  //   return e;
-  // }
-  //
-  // /* */
-  //
-  // function onKeyForCompareSerialDefault( e, k )
-  // {
-  //   if( !counter )
-  //   return k;
-  // }
-
-  /* */
-
 }
 
-entitySearch.defaults =
-{
+search.defaults = Defaults;
 
-  src : null,
-  ins : null,
-  condition : null,
-
-  // onUp : function(){},
-  // onDown : function(){},
-  onUp : null,
-  onDown : null,
-  onValueForCompare : null,
-  onKeyForCompare : null,
-
-  onlyOwn : 1,
-  recursive : Infinity,
-
-  order : 'all',
-  // comparing : 'once',
-  returning : 'src',
-  // usingExactPath : 0,
-
-  searchingKey : 1,
-  searchingValue : 1,
-  searchingSubstring : 1,
-  searchingCaseInsensitive : 0,
-
-}
-
-// entitySearch.defaults.__proto__ = _.look.defaults;
-Object.setPrototypeOf( entitySearch.defaults, _.look.defaults );
+// {
+//
+//   // src : null,
+//   // ins : null,
+//   // condition : null,
+//   //
+//   // onUp : null,
+//   // onDown : null,
+//   // onValueForCompare : null,
+//   // onKeyForCompare : null,
+//   //
+//   // onlyOwn : 1,
+//   // recursive : Infinity,
+//   //
+//   // order : 'all',
+//   // returning : 'src',
+//   //
+//   // searchingKey : 1,
+//   // searchingValue : 1,
+//   // searchingSubstring : 1,
+//   // searchingCaseInsensitive : 0,
+//
+// }
+//
+// // Object.setPrototypeOf( search.defaults, _.look.defaults );
 
 //
 
@@ -473,16 +467,16 @@ Object.setPrototypeOf( entitySearch.defaults, _.look.defaults );
  *
  * @example
  * let src = { a : 1 };
- * _.entityFreezeRecursive( src );
+ * _.freezeRecursive( src );
  * src.a = 5;
  * console.log( src.a )//1
  *
- * @function entityFreezeRecursive
+ * @function freezeRecursive
  * @namespace Tools
  * @module Tools/base/LookerExtra
  */
 
-function entityFreezeRecursive( src )
+function freezeRecursive( src )
 {
   let lookOptions = Object.create( null );
 
@@ -501,8 +495,6 @@ function entityFreezeRecursive( src )
 // transformer
 // --
 
-//
-
 /**
    * Groups elements of entities from array( src ) into the object with key( o.key )
    * that contains array of values that corresponds to key( o.key ) from that entities.
@@ -520,7 +512,7 @@ function entityFreezeRecursive( src )
    * //  key1 : [ 1, 2, 3 ],
    * //  key3 : [ undefined, undefined, undefined ]
    * //}
-   * _.entityGroup( { src : [ {key1 : 1, key2 : 2 }, {key1 : 2 }, {key1 : 3 }], usingOriginal : 0, key : ['key1', 'key3']} );
+   * _.group( { src : [ {key1 : 1, key2 : 2 }, {key1 : 2 }, {key1 : 3 }], usingOriginal : 0, key : ['key1', 'key3']} );
    *
    * @example
    * // returns
@@ -532,9 +524,9 @@ function entityFreezeRecursive( src )
    * //     undefined : [ { c : 4 } ]
    * //   }
    * // }
-   * _.entityGroup( { src : [ { a : 1, b : 2 }, { a : 2, b : 3}, {  c : 4 }  ], key : ['a'] }  );
+   * _.group( { src : [ { a : 1, b : 2 }, { a : 2, b : 3}, {  c : 4 }  ], key : ['a'] }  );
    *
-   * @function entityGroup
+   * @function group
    * @throws {exception} If( arguments.length ) is not equal 1.
    * @throws {exception} If( o.key ) is not a Array or String.
    * @throws {exception} If( o.src ) is not a Array-like or Object-like.
@@ -542,7 +534,7 @@ function entityFreezeRecursive( src )
  * @module Tools/base/LookerExtra
    */
 
-function entityGroup( o )
+function group( o )
 {
   o = o || Object.create( null );
 
@@ -563,7 +555,7 @@ function entityGroup( o )
 
   /* */
 
-  o = _.routineOptions( entityGroup, o );
+  o = _.routineOptions( group, o );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( o.key ) || _.arrayIs( o.key ) );
@@ -624,7 +616,7 @@ function entityGroup( o )
 
 }
 
-entityGroup.defaults =
+group.defaults =
 {
   src : null,
   key : null,
@@ -635,25 +627,46 @@ entityGroup.defaults =
 // declare
 // --
 
-let Proto =
+let EntityExtension =
 {
 
   // unsorted
 
-  entityWrap,
-  entitySearch,
-  entityFreezeRecursive,
-  entityGroup, /* experimental */
+  wrap,
+  search,
+  freezeRecursive,
+  group, /* experimental */
 
 }
 
-_.mapSupplement( Self, Proto );
+let SearcherExtension =
+{
+
+  is : _.looker.is,
+  iteratorIs : _.looker.iteratorIs,
+  iterationIs : _.looker.iterationIs,
+  make : _.looker.make,
+
+  search,
+  look : search,
+  Searcher,
+  Looker : Searcher,
+
+}
+
+// - entityWrap -> _.entity.wrap
+// - entitySearch -> _.entity.search,
+// - entityFreezeRecursive -> _.entity.freezeRecursive,
+// - entityGroup -> _.entity.group,
+
+_.mapSupplement( _.entity, EntityExtension );
+_.mapSupplement( _.searcher, SearcherExtension );
 
 // --
 // export
 // --
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = Self;
+module[ 'exports' ] = _;
 
 })();
