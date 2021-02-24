@@ -32,7 +32,7 @@ _.searcher = _.searcher || Object.create( null );
 _.assert( !!_realGlobal_ );
 
 // --
-// declare looker
+// relations
 // --
 
 let Defaults =
@@ -61,35 +61,6 @@ let Defaults =
   searchingCaseInsensitive : 0,
 
 }
-
-let Looker =
-{
-}
-
-let Iterator =
-{
-}
-
-let Iteration =
-{
-  added : null,
-}
-
-let IterationPreserve =
-{
-}
-
-let Searcher = _.looker.make
-({
-  name : 'Searcher',
-  parent : _.Resolver,
-  looker : Looker,
-  iterator : Iterator,
-  iteration : Iteration,
-  iterationPreserve : IterationPreserve,
-});
-
-const Self = Searcher;
 
 // --
 // each
@@ -622,6 +593,44 @@ group.defaults =
   key : null,
   usingOriginal : 1,
 }
+
+// --
+// relations
+// --
+
+let Looker =
+{
+}
+
+let Iterator =
+{
+}
+
+let Iteration =
+{
+  added : null,
+}
+
+let IterationPreserve =
+{
+}
+
+let Searcher = _.looker.make
+({
+  name : 'Searcher',
+  parent : _.Resolver,
+  defaults : Defaults,
+  looker : Looker,
+  iterator : Iterator,
+  iteration : Iteration,
+  iterationPreserve : IterationPreserve,
+});
+
+/* xxx : pass defaults */
+/* xxx : introduce head */
+/* xxx : introduce start */
+
+const Self = Searcher;
 
 // --
 // declare
