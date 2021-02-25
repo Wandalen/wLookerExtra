@@ -228,24 +228,15 @@ function search( o )
 
   let onUp = o.onUp;
   let onDown = o.onDown;
-  // let lookOptions = _.mapOnly( o, _.look.defaults )
-  let lookOptions = o;
-  lookOptions.onUp = handleUp;
-  lookOptions.onDown = handleDown;
-  // lookOptions.iteratorExtension = lookOptions.iteratorExtension || Object.create( null );
-  // lookOptions.iteratorExtension.onValueForCompare = o.onValueForCompare;
-  // lookOptions.iteratorExtension.onKeyForCompare = o.onKeyForCompare;
-  // lookOptions.iteratorExtension.order = o.order;
-  // lookOptions.iteratorExtension.comparing = o.comparing;
-  // lookOptions.iterationExtension = lookOptions.iterationExtension || Object.create( null );
-  // lookOptions.iterationExtension.added = null;
+  o.onUp = handleUp;
+  o.onDown = handleDown;
 
   if( !o.Looker )
   o.Looker = Self;
 
-  let it = o.Looker.head( search, [ lookOptions ] );
+  let it = o.Looker.head( search, [ o ] );
 
-  it.start();
+  it.perform();
 
   return result;
 
@@ -615,7 +606,7 @@ let IterationPreserve =
 {
 }
 
-let Searcher = _.looker.make
+let Searcher = _.looker.define
 ({
   name : 'Searcher',
   parent : _.Resolver,
@@ -626,9 +617,9 @@ let Searcher = _.looker.make
   iterationPreserve : IterationPreserve,
 });
 
-/* xxx : pass defaults */
-/* xxx : introduce head */
-/* xxx : introduce start */
+/* qqq : split lookers by files */
+/* qqq : introduce head */
+/* qqq : introduce perform */
 
 const Self = Searcher;
 
@@ -654,7 +645,7 @@ let SearcherExtension =
   is : _.looker.is,
   iteratorIs : _.looker.iteratorIs,
   iterationIs : _.looker.iterationIs,
-  make : _.looker.make,
+  make : _.looker.define,
 
   search,
   look : search,
