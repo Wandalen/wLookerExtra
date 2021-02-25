@@ -645,7 +645,7 @@ let SearcherExtension =
   is : _.looker.is,
   iteratorIs : _.looker.iteratorIs,
   iterationIs : _.looker.iterationIs,
-  make : _.looker.define,
+  define : _.looker.define,
 
   search,
   look : search,
