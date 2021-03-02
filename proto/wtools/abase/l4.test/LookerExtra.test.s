@@ -114,7 +114,7 @@ function entitySearchOptionPathJoin( test )
   ({
     src : structure,
     ins : 'str',
-    onPathJoin,
+    pathJoin,
   });
   var exp =
   {
@@ -132,26 +132,31 @@ function entitySearchOptionPathJoin( test )
     dws.splice( 0, dws.length );
   }
 
-  function onPathJoin( /* selectorPath, upToken, defaultUpToken, selectorName */ )
+  // function pathJoin( /* selectorPath, upToken, defaultUpToken, selectorName */ )
+  function pathJoin( selectorPath, selectorName )
   {
-    let selectorPath = arguments[ 0 ];
-    let upToken = arguments[ 1 ];
-    let defaultUpToken = arguments[ 2 ];
-    let selectorName = arguments[ 3 ];
+    // let selectorPath = arguments[ 0 ];
+    // let upToken = arguments[ 1 ];
+    // let defaultUpToken = arguments[ 2 ];
+    // let selectorName = arguments[ 3 ];
 
     let it = this;
     let result;
 
-    _.assert( arguments.length === 4 );
+    _.assert( arguments.length === 2 );
 
-    if( _.strEnds( selectorPath, upToken ) )
-    {
-      result = selectorPath + _.entity.strType( it.src ) + '::' + selectorName;
-    }
-    else
-    {
-      result = selectorPath + defaultUpToken + _.entity.strType( it.src ) + '::' + selectorName;
-    }
+    selectorPath = _.strRemoveEnd( selectorPath, it.upToken );
+
+    // if( _.strEnds( selectorPath, upToken ) )
+    // {
+    //   result = selectorPath + _.entity.strType( it.src ) + '::' + selectorName;
+    // }
+    // else
+    // {
+    //   result = selectorPath + defaultUpToken + _.entity.strType( it.src ) + '::' + selectorName;
+    // }
+
+    result = selectorPath + it.defaultUpToken + _.entity.strType( it.src ) + '::' + selectorName;
 
     return result;
   }
