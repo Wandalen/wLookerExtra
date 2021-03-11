@@ -938,15 +938,15 @@ let EntityExtension =
 let SearcherExtension =
 {
 
-  is : _.looker.is,
-  iteratorIs : _.looker.iteratorIs,
-  iterationIs : _.looker.iterationIs,
-  classDefine : _.looker.classDefine,
+  ... _.looker,
+  // is : _.looker.is,
+  // iteratorIs : _.looker.iteratorIs,
+  // iterationIs : _.looker.iterationIs,
+  // classDefine : _.looker.classDefine,
 
   searchIt,
   look : searchIt,
   search,
-  Searcher,
   Looker : Searcher,
   Searcher,
 
