@@ -25,7 +25,9 @@ function entitySearch( test )
 
   test.case = '2 arguments';
   var src = { a : 0, e : { d : 'something' } };
+  debugger;
   var got = _.entity.search( src, 'something' );
+  debugger;
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 
@@ -75,10 +77,10 @@ function entitySearchReturningIt( test )
     'index' : 0,
     // 'containerType' : null,
     'src' : 'something',
-    // '/*srcEffective*/src' : 'something',
+    // 'src' : 'something',
     'continue' : true,
     'ascending' : false,
-    'ascendAct' : got[ 0 ].ascendAct,
+    // 'ascendAct' : got[ 0 ].ascendAct,
     'revisited' : false,
     '_' : null,
     'visiting' : true,
@@ -186,12 +188,13 @@ function entitySearchMapFromObjectLoop( test )
     ins : 2,
     onUp,
     onDown,
+    iterableEval,
   });
   var exp =
   {
     '/obj1/b' : 2,
   }
-  test.identical( found, exp );
+  test.identical( found, exp ); debugger;
 
   var exp = [ '/', '/a', '/obj1', '/obj1/b', '/obj1/itself' ];
   test.identical( ups, exp );
@@ -211,6 +214,15 @@ function entitySearchMapFromObjectLoop( test )
     dws.splice( 0, dws.length );
   }
 
+  function iterableEval()
+  {
+    let it = this;
+    if( _.objectIs( it.src ) )
+    it.iterable = 'Node';
+    else
+    it.Looker.iterableEval.call( it );
+  }
+
   function onUp( e, k, _it )
   {
     let it = this;
@@ -218,17 +230,24 @@ function entitySearchMapFromObjectLoop( test )
     _.assert( arguments.length === 3 );
     ups.push( it.path );
 
-    it.iterable = 'Node';
-    it.ascendAct = function nodeAscend( node )
+    // it.iterable = 'Node';
+    // it.ascendAct = function nodeAscend( node ) /* xxx : remove each */
+    // it.iterable = 'Node';
+    // it.iterableEval = function iterableEval()
+    // {
+    // }
+    it.onAscend = function nodeAscend()
     {
+      debugger;
+      let node = this.src;
       if( !_.objectIs( node ) )
       return;
       let map = _.mapExtend( null, node );
-      this.revisitedEval( node );
-      return this._mapAscend( map );
+      // this.revisitedEval( node ); /* xxx : find each */
+      return this._auxAscend( map );
     }
 
-    it.revisitedEval( e );
+    // it.revisitedEval( e );
 
   }
 
@@ -632,8 +651,10 @@ function entitySearchMapTopToBottomWithOnAscend( test )
       src = _.mapBut( src, { code : null } );
       if( it.src.code !== undefined )
       src.code = it.src.code;
+      it.src = src;
     }
-    return it.ascendAct( src );
+    return it.Looker.onAscend.call( it );
+    // return it.ascendAct( src );
   }
 
 }
