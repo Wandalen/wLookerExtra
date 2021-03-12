@@ -14,7 +14,7 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.Looker;
+let Parent = _.looker.Looker;
 
 // --
 // tests
@@ -25,9 +25,7 @@ function entitySearch( test )
 
   test.case = '2 arguments';
   var src = { a : 0, e : { d : 'something' } };
-  debugger;
   var got = _.entity.search( src, 'something' );
-  debugger;
   var exp = { '/e/d' : 'something' };
   test.identical( got, exp );
 

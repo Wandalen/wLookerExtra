@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
-_.searcher = _.searcher || Object.create( null );
+_.searcher = _.searcher || Object.create( _.looker );
 
 _.assert( !!_realGlobal_ );
 
@@ -35,7 +35,7 @@ _.assert( !!_realGlobal_ );
 // relations
 // --
 
-let Defaults =
+let Prime =
 {
 
   // ... _.looker.look.defaults,
@@ -412,7 +412,7 @@ wrap.defaults =
 //
 // }
 
-// search.defaults = Defaults;
+// search.defaults = Prime;
 
 // {
 //
@@ -886,7 +886,7 @@ let Searcher = _.looker.classDefine
 ({
   name : 'Searcher',
   parent : _.Resolver,
-  defaults : Defaults,
+  prime : Prime,
   looker : Looker,
   iterator : Iterator,
   iteration : Iteration,
@@ -899,9 +899,7 @@ _.assert( Searcher.onKeyForCompare === onKeyForCompareOnceDefault );
 /* qqq : introduce head */
 /* qqq : introduce perform */
 
-// search.defaults = Searcher;
 const searchIt = Searcher.exec;
-// debugger;
 
 _.assert( searchIt.defaults.order === 'all' );
 _.assert( searchIt.defaults === Searcher );
@@ -938,7 +936,7 @@ let EntityExtension =
 let SearcherExtension =
 {
 
-  ... _.looker,
+  // ... _.looker,
   // is : _.looker.is,
   // iteratorIs : _.looker.iteratorIs,
   // iterationIs : _.looker.iterationIs,
@@ -952,13 +950,9 @@ let SearcherExtension =
 
 }
 
-// - entityWrap -> _.entity.wrap
-// - entitySearch -> _.entity.search,
-// - entityFreezeRecursive -> _.entity.freezeRecursive,
-// - entityGroup -> _.entity.group,
-
-_.mapSupplement( _.entity, EntityExtension );
-_.mapSupplement( _.searcher, SearcherExtension );
+_.mapExtend( _.entity, EntityExtension );
+_.mapExtend( _.searcher, SearcherExtension );
+_.assert( _.routineIs( _.searcher.iteratorIs ) );
 
 // --
 // export
