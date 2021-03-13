@@ -910,7 +910,7 @@ _.assert( searchIt.defaults === Searcher );
 
 search_body.defaults = Searcher;
 
-let search = _.routineUnite({ head : searchIt.head, body : search_body, strategy : 'replacing' });
+let search = _.routine.uniteCloning_({ head : searchIt.head, body : search_body, strategy : 'replacing' });
 
 _.assert( searchIt.defaults.order === 'all' );
 _.assert( searchIt.defaults === Searcher );
