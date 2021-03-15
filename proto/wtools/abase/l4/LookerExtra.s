@@ -27,8 +27,10 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
+let Parent = _.looker.Looker;
 _.searcher = _.searcher || Object.create( _.looker );
 
+_.assert( !!Parent );
 _.assert( !!_realGlobal_ );
 
 // --
@@ -38,16 +40,12 @@ _.assert( !!_realGlobal_ );
 let Prime =
 {
 
-  // ... _.looker.look.defaults,
-
-  src : null,
-  ins : null,
+  src : undefined,
+  ins : undefined,
   condition : null,
 
   onUp : null,
   onDown : null,
-  // onValueForCompare : null,
-  // onKeyForCompare : null,
   onValueForCompare : onValueForCompareOnceDefault,
   onKeyForCompare : onKeyForCompareOnceDefault,
 
@@ -76,11 +74,10 @@ let Prime =
  * @module Tools/base/LookerExtra
  */
 
+/* qqq : refactor to make it similar to search */
 function wrap( o )
 {
   let result = o.dst;
-
-  debugger;
 
   _.routineOptions( wrap, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
@@ -92,8 +89,6 @@ function wrap( o )
 
   function handleDown( e, k, it )
   {
-
-    debugger;
 
     if( o.onCondition )
     if( !o.onCondition.call( this, e, k, it ) )
@@ -183,263 +178,6 @@ wrap.defaults =
  * @module Tools/base/LookerExtra
  */
 
-/* xxx qqq : write method head similar looker has */
-
-// function search_head( routine, args )
-// {
-//   return routine.defaults.head( routine, args );
-// }
-//
-// function search_body( it )
-// {
-//   _.assert( arguments.length === 1, 'Expects single argument' );
-//   _.assert( _.objectIs( it.Looker ) );
-//   _.assert( _.prototype.isPrototypeFor( it.Looker, it ) );
-//   _.assert( it.looker === undefined );
-//   it.perform();
-//   return it;
-// }
-
-// function search( o )
-// {
-//   let result;
-//
-//   if( arguments.length === 2 )
-//   {
-//     o = { src : arguments[ 0 ], ins : arguments[ 1 ] };
-//   }
-//
-//   // _.mapSupplement( o, search.defaults );
-//   // _.routineOptions( search, o );
-//   _.assertMapHasOnly( o, search.defaults );
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//   _.assert( _.longHas( [ 'src', 'it' ], o.returning ) );
-//   _.assert( _.longHas( [ 'all', 'top-to-bottom' ], o.order ) );
-//
-//   if( o.onValueForCompare === null )
-//   o.onValueForCompare = onValueForCompareOnceDefault;
-//   if( o.onKeyForCompare === null )
-//   o.onKeyForCompare = onKeyForCompareOnceDefault;
-//
-//   _.assert( o.onDown === null || o.onDown.length === 0 || o.onDown.length === 3 );
-//   _.assert( o.onUp === null || o.onUp.length === 0 || o.onUp.length === 3 );
-//
-//   let iterationCompareAndAdd;
-//   iterationCompareAndAdd = iterationCompareAndAddOnce;
-//
-//   if( o.returning === 'src' )
-//   result = Object.create( null );
-//   else
-//   result = [];
-//
-//   let insStr, insRegexp;
-//   insStr = String( o.ins );
-//
-//   if( o.searchingCaseInsensitive && _.strIs( o.ins ) )
-//   insRegexp = new RegExp( ( o.searchingSubstring ? '' : '^' ) + insStr + ( o.searchingSubstring ? '' : '$' ), 'i' );
-//
-//   if( o.condition )
-//   {
-//     o.condition = _filter_functor( o.condition, 1 );
-//     _.assert( o.condition.length === 0 || o.condition.length === 3 );
-//   }
-//
-//   /* */
-//
-//   let onUp = o.onUp;
-//   let onDown = o.onDown;
-//   o.onUp = handleUp;
-//   o.onDown = handleDown;
-//
-//   if( !o.Looker )
-//   o.Looker = Self;
-//
-//   let it = o.Looker.head( search, [ o ] );
-//
-//   it.perform();
-//
-//   return result;
-//
-//   /* */
-//
-//   function handleUp( e, k, it )
-//   {
-//
-//     _.assert( arguments.length === 3 );
-//
-//     if( onUp )
-//     {
-//       let r = onUp.call( this, e, k, it );
-//       _.assert( r === undefined );
-//     }
-//
-//     if( !it.continue || !it.iterator.continue )
-//     return;
-//
-//     if( it.order === 'top-to-bottom' )
-//     return;
-//
-//     iterationCompareAndAdd.call( it );
-//
-//   }
-//
-//   /* */
-//
-//   function handleDown( e, k, it )
-//   {
-//
-//     _.assert( arguments.length === 3 );
-//
-//     if( onDown )
-//     {
-//       let r = onDown.call( this, e, k, it );
-//       _.assert( r === undefined );
-//     }
-//
-//     if( !it.continue || !it.iterator.continue )
-//     return end();
-//
-//     if( it.order === 'top-to-bottom' )
-//     if( !it.added )
-//     iterationCompareAndAdd.call( it );
-//
-//     return end();
-//
-//     function end()
-//     {
-//       if( it.added )
-//       if( it.down )
-//       {
-//         it.down.added = true;
-//       }
-//     }
-//   }
-//
-//   /* */
-//
-//   function resultAdd()
-//   {
-//     let it = this;
-//     let e = it.src;
-//     let path = it.path;
-//
-//     _.assert( arguments.length === 0, 'Expects no arguments' );
-//
-//     if( o.returning === 'it' )
-//     {
-//       e = it;
-//     }
-//
-//     if( o.returning === 'src' )
-//     result[ path ] = e;
-//     else
-//     result.push( e );
-//
-//     it.added = true;
-//     if( it.order === 'top-to-bottom' )
-//     it.continue = false;
-//
-//   }
-//
-//   /* */
-//
-//   function iterationCompareAndAddOnce()
-//   {
-//     let it = this;
-//     let e = it.src;
-//     let k = it.key;
-//
-//     if( o.searchingValue )
-//     {
-//       let value = it.onValueForCompare( e, k );
-//       if( compare.call( this, value, k ) )
-//       resultAdd.call( this );
-//     }
-//
-//     if( o.searchingKey )
-//     {
-//       if( compare.call( this, it.onKeyForCompare( e, k ), k ) )
-//       resultAdd.call( this );
-//     }
-//
-//   }
-//
-//   /* */
-//
-//   function compare( e, k )
-//   {
-//
-//     _.assert( arguments.length === 2 );
-//
-//     if( o.condition )
-//     {
-//       if( !o.condition.call( this, e, k, it ) )
-//       return false;
-//     }
-//
-//     if( e === o.ins )
-//     {
-//       return true;
-//     }
-//     else if( insRegexp )
-//     {
-//       if( insRegexp.test( e ) )
-//       return true;
-//     }
-//     else if( o.searchingSubstring && _.strIs( e ) && e.indexOf( insStr ) !== -1 )
-//     {
-//       return true;
-//     }
-//
-//     return false;
-//   }
-//
-//   /* */
-//
-//   function onValueForCompareOnceDefault( e, k )
-//   {
-//     return e;
-//   }
-//
-//   /* */
-//
-//   function onKeyForCompareOnceDefault( e, k )
-//   {
-//     return k;
-//   }
-//
-//   /* */
-//
-// }
-
-// search.defaults = Prime;
-
-// {
-//
-//   // src : null,
-//   // ins : null,
-//   // condition : null,
-//   //
-//   // onUp : null,
-//   // onDown : null,
-//   // onValueForCompare : null,
-//   // onKeyForCompare : null,
-//   //
-//   // onlyOwn : 1,
-//   // recursive : Infinity,
-//   //
-//   // order : 'all',
-//   // returning : 'src',
-//   //
-//   // searchingKey : 1,
-//   // searchingValue : 1,
-//   // searchingSubstring : 1,
-//   // searchingCaseInsensitive : 0,
-//
-// }
-//
-// // Object.setPrototypeOf( search.defaults, _.look.defaults );
-
 //
 
 function search_body( it )
@@ -464,115 +202,6 @@ function optionsFromArguments( args )
   _.assert( _.mapIs( o ) );
 
   return o;
-}
-
-//
-
-function optionsForm( routine, iterator )
-{
-
-  _.assert( arguments.length === 2 );
-  _.assert( _.longHas( [ 'src', 'it' ], iterator.returning ) );
-  _.assert( _.longHas( [ 'all', 'top-to-bottom' ], iterator.order ) );
-
-  _.assert( iterator.onDown === null || iterator.onDown.length === 0 || iterator.onDown.length === 3 );
-  _.assert( iterator.onUp === null || iterator.onUp.length === 0 || iterator.onUp.length === 3 );
-
-  // let iterationCompareAndAdd;
-  // iterationCompareAndAdd = iterationCompareAndAddOnce;
-
-  if( iterator.returning === 'src' )
-  iterator.result = Object.create( null );
-  else
-  iterator.result = [];
-
-  // let insStr, insRegexp;
-  iterator.insStr = String( iterator.ins );
-
-  if( iterator.searchingCaseInsensitive && _.strIs( iterator.ins ) )
-  iterator.insRegexp = new RegExp( ( iterator.searchingSubstring ? '' : '^' ) + iterator.insStr + ( iterator.searchingSubstring ? '' : '$' ), 'i' );
-
-  if( iterator.condition )
-  {
-    iterator.condition = _filter_functor( iterator.condition, 1 );
-    _.assert( iterator.condition.length === 0 || iterator.condition.length === 3 );
-  }
-
-  /* */
-
-  let onUp = iterator.onUp;
-  let onDown = iterator.onDown;
-  iterator.onUp = handleUp;
-  iterator.onDown = handleDown;
-
-  // debugger;
-
-  // if( !o.Looker )
-  // o.Looker = Self;
-  //
-  // let it = o.Looker.head( search, [ o ] );
-  //
-  // it.perform();
-
-  // return result;
-
-  /* */
-
-  function handleUp( e, k, it )
-  {
-
-    _.assert( arguments.length === 3 );
-
-    if( onUp )
-    {
-      let r = onUp.call( this, e, k, it );
-      _.assert( r === undefined );
-    }
-
-    if( !it.continue || !it.iterator.continue )
-    return;
-
-    if( it.order === 'top-to-bottom' )
-    return;
-
-    it.iterationCompareAndAddOnce( it );
-
-  }
-
-  /* */
-
-  function handleDown( e, k, it )
-  {
-
-    _.assert( arguments.length === 3 );
-
-    if( onDown )
-    {
-      let r = onDown.call( this, e, k, it );
-      _.assert( r === undefined );
-    }
-
-    if( !it.continue || !it.iterator.continue )
-    return end();
-
-    if( it.order === 'top-to-bottom' )
-    if( !it.added )
-    it.iterationCompareAndAddOnce( it );
-
-    return end();
-
-    function end()
-    {
-      if( it.added )
-      if( it.down )
-      {
-        it.down.added = true;
-      }
-    }
-  }
-
-  /* */
-
 }
 
 //
@@ -609,8 +238,6 @@ function iterationCompareAndAddOnce()
   let e = it.src;
   let k = it.key;
 
-  // debugger;
-
   if( it.iterator.searchingValue )
   {
     let value = it.onValueForCompare( e, k );
@@ -620,7 +247,6 @@ function iterationCompareAndAddOnce()
 
   if( it.iterator.searchingKey )
   {
-    // debugger;
     if( it.compare( it.onKeyForCompare( e, k ), k ) )
     it.resultAdd();
   }
@@ -676,8 +302,106 @@ function onKeyForCompareOnceDefault( e, k )
 
 function optionsToIteration( iterator, o )
 {
-  let it = _.looker.Looker.optionsToIteration.call( this, iterator, o );
+  let it = Parent.optionsToIteration.call( this, iterator, o );
   return it;
+}
+
+//
+
+function iteratorInitEnd( iterator )
+{
+  let looker = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.longHas( [ 'src', 'it' ], iterator.returning ) );
+  _.assert( _.longHas( [ 'all', 'top-to-bottom' ], iterator.order ) );
+  _.assert( iterator.onDown === null || iterator.onDown.length === 0 || iterator.onDown.length === 3 );
+  _.assert( iterator.onUp === null || iterator.onUp.length === 0 || iterator.onUp.length === 3 );
+
+  if( iterator.returning === 'src' )
+  iterator.result = Object.create( null );
+  else
+  iterator.result = [];
+
+  iterator.insStr = String( iterator.ins );
+
+  if( iterator.searchingCaseInsensitive && _.strIs( iterator.ins ) )
+  iterator.insRegexp = new RegExp( ( iterator.searchingSubstring ? '' : '^' ) + iterator.insStr + ( iterator.searchingSubstring ? '' : '$' ), 'i' );
+
+  if( iterator.condition )
+  {
+    iterator.condition = _filter_functor( iterator.condition, 1 );
+    _.assert( iterator.condition.length === 0 || iterator.condition.length === 3 );
+  }
+
+  /* */
+
+  _.assert( iterator.onUp2 === null ); /* xxx0 : remove from defaults. write test */
+  _.assert( iterator.onDown2 === null );
+
+  iterator.onUp2 = iterator.onUp;
+  iterator.onDown2 = iterator.onDown;
+  iterator.onUp = iterator._searchUp;
+  iterator.onDown = iterator._searchDown;
+
+  /* */
+
+  return Parent.iteratorInitEnd.call( this, iterator );
+}
+
+//
+
+function _searchUp( e, k, it )
+{
+
+  _.assert( arguments.length === 3 );
+
+  if( it.onUp2 )
+  {
+    let r = it.onUp2.call( this, e, k, it );
+    _.assert( r === undefined );
+  }
+
+  if( !it.continue || !it.iterator.continue )
+  return;
+
+  if( it.order === 'top-to-bottom' )
+  return;
+
+  it.iterationCompareAndAddOnce( it );
+
+}
+
+//
+
+function _searchDown( e, k, it )
+{
+
+  _.assert( arguments.length === 3 );
+
+  if( it.onDown2 )
+  {
+    let r = it.onDown2.call( this, e, k, it );
+    _.assert( r === undefined );
+  }
+
+  if( !it.continue || !it.iterator.continue )
+  return end();
+
+  if( it.order === 'top-to-bottom' )
+  if( !it.added )
+  it.iterationCompareAndAddOnce( it );
+
+  return end();
+
+  function end()
+  {
+    if( it.added )
+    if( it.down )
+    {
+      it.down.added = true;
+    }
+  }
 }
 
 //
@@ -792,7 +516,6 @@ function group( o )
     result = Object.create( null );
     for( let k = 0 ; k < o.key.length ; k++ )
     {
-      debugger;
       let r = o.usingOriginal ? Object.create( null ) : _.entity.cloneShallow( o.src );
       result[ o.key[ k ] ] = groupForKey( o.key[ k ], r );
     }
@@ -852,9 +575,11 @@ let Looker =
 {
 
   optionsFromArguments,
-  optionsForm,
   optionsToIteration,
+  iteratorInitEnd,
 
+  _searchUp,
+  _searchDown,
   resultAdd,
   iterationCompareAndAddOnce,
   compare,
@@ -870,6 +595,9 @@ let Iterator =
 
   insStr : null,
   insRegexp : null,
+
+  onUp2 : null,
+  onDown2 : null,
 
 }
 
@@ -896,17 +624,14 @@ let Searcher = _.looker.classDefine
 _.assert( Searcher.onKeyForCompare === onKeyForCompareOnceDefault );
 
 /* qqq : split lookers by files */
-/* qqq : introduce head */
-/* qqq : introduce perform */
 
 const searchIt = Searcher.exec;
 
 _.assert( searchIt.defaults.order === 'all' );
 _.assert( searchIt.defaults === Searcher );
 
-/* xxx : uncomment later */
-// _.assert( searchIt.body.defaults.order === 'all' );
-// _.assert( searchIt.body.defaults === Searcher );
+_.assert( searchIt.body.defaults.order === 'all' );
+_.assert( searchIt.body.defaults === Searcher );
 
 search_body.defaults = Searcher;
 

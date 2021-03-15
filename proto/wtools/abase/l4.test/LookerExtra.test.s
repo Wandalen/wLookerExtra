@@ -73,12 +73,9 @@ function entitySearchReturningIt( test )
     'path' : '/e/d',
     'key' : 'd',
     'index' : 0,
-    // 'containerType' : null,
     'src' : 'something',
-    // 'src' : 'something',
     'continue' : true,
     'ascending' : false,
-    // 'ascendAct' : got[ 0 ].ascendAct,
     'revisited' : false,
     '_' : null,
     'visiting' : true,
@@ -192,7 +189,7 @@ function entitySearchMapFromObjectLoop( test )
   {
     '/obj1/b' : 2,
   }
-  test.identical( found, exp ); debugger;
+  test.identical( found, exp );
 
   var exp = [ '/', '/a', '/obj1', '/obj1/b', '/obj1/itself' ];
   test.identical( ups, exp );
@@ -228,24 +225,14 @@ function entitySearchMapFromObjectLoop( test )
     _.assert( arguments.length === 3 );
     ups.push( it.path );
 
-    // it.iterable = 'Node';
-    // it.ascendAct = function nodeAscend( node ) /* xxx : remove each */
-    // it.iterable = 'Node';
-    // it.iterableEval = function iterableEval()
-    // {
-    // }
     it.onAscend = function nodeAscend()
     {
-      debugger;
       let node = this.src;
       if( !_.objectIs( node ) )
       return;
       let map = _.mapExtend( null, node );
-      // this.revisitedEval( node ); /* xxx : find each */
       return this._auxAscend( map );
     }
-
-    // it.revisitedEval( e );
 
   }
 
@@ -652,7 +639,6 @@ function entitySearchMapTopToBottomWithOnAscend( test )
       it.src = src;
     }
     return it.Looker.onAscend.call( it );
-    // return it.ascendAct( src );
   }
 
 }
@@ -691,6 +677,8 @@ let Self =
     entitySearchMapTopToBottom,
     entitySearchMapTopToBottomWithOnUp,
     entitySearchMapTopToBottomWithOnAscend,
+
+    // /* qqq : implement test routine iteratorResult, similar replicator have
 
   }
 
