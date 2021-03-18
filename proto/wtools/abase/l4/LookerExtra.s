@@ -33,6 +33,8 @@ _.searcher = _.searcher || Object.create( _.looker );
 _.assert( !!Parent );
 _.assert( !!_realGlobal_ );
 
+/* qqq : write nice example for readme */
+
 // --
 // relations
 // --
