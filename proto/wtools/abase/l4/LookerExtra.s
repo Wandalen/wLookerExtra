@@ -25,9 +25,9 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.looker.Looker;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.looker.Looker;
 _.searcher = _.searcher || Object.create( _.looker );
 
 _.assert( !!Parent );

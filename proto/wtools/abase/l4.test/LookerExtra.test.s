@@ -12,9 +12,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.looker.Looker;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.looker.Looker;
 
 // --
 // tests
@@ -633,7 +633,7 @@ function entitySearchMapTopToBottomWithOnAscend( test )
     let src = it.src;
     if( _.mapIs( src ) )
     {
-      src = _.mapBut( src, { code : null } );
+      src = _.mapBut_( null, src, { code : null } );
       if( it.src.code !== undefined )
       src.code = it.src.code;
       it.src = src;
@@ -654,7 +654,7 @@ entitySearchMapTopToBottomWithOnAscend.description =
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l4.LookerExtra',
@@ -684,7 +684,7 @@ let Self =
 
 }
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
