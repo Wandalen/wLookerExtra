@@ -1,6 +1,6 @@
 {
   "name": "wlookerextra",
-  "version": "0.3.218",
+  "version": "0.3.219",
   "description": "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
   "license": "MIT",
@@ -8,7 +8,8 @@
   "files": [
     "proto/wtools/abase/l4",
     "proto/wtools/Tools.s",
-    "out"
+    "out",
+    "proto/node_modules"
   ],
   "scripts": {
     "test": "wtest .run 'proto/**' rapidity:-3",
@@ -27,8 +28,7 @@
   },
   "devDependencies": {
     "eslint": "7.1.0",
-    "wTesting": "delta",
-    "wlookerextra": "file:."
+    "wTesting": "delta"
   },
   "keywords": [
     "wTools"
