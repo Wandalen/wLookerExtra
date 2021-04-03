@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wLookerExtra.out
 consistency:
-  wLookerExtra.out.will.yml: &ref_0
-    hash: 5af96f19af00b44243dbc1b26492cc2d
-    size: 38301
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: 10c7f86d61f8cedb4f6355e413d03791
     size: 1857
-  ../.im.will.yml: &ref_2
-    hash: 9b6c0ee9dcf55adeac8dc79fdece3445
-    size: 5116
+  ../.im.will.yml: &ref_1
+    hash: c8db78408e5d98aacfe7231d18622221
+    size: 5088
 module:
   wLookerExtra.out:
     about:
@@ -21,21 +18,21 @@ module:
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
         - wReplicator
         - wResolver
         - complex data structure
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wlookerextra
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -66,7 +63,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ../
+        path: ..
       repository:
         path: 'git+https:///github.com/Wandalen/wLookerExtra.git'
       origins:
@@ -147,6 +144,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - ../proto/wtools/abase/l4/LookerExtra.s
+          - ../proto/node_modules/wlookerextra
       exported.dir.proto.export:
         criterion:
           generated: 1
@@ -706,24 +707,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -812,9 +795,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wLookerExtra.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wLookerExtra
@@ -824,23 +806,13 @@ module:
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
-        - wReplicator
-        - wResolver
-        - complex data structure
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
+      contributors: *ref_4
       npm.name: wlookerextra
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -869,7 +841,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ./
+        path: .
       repository:
         path: 'git+https:///github.com/Wandalen/wLookerExtra.git'
       origins:
@@ -950,6 +922,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - proto/wtools/abase/l4/LookerExtra.s
+          - proto/node_modules/wlookerextra
     submodule:
       wLooker:
         path: 'npm:///wlooker'
@@ -1512,6 +1488,5 @@ module:
         hash: 10c7f86d61f8cedb4f6355e413d03791
         size: 1857
       ../.im.will.yml:
-        hash: 9b6c0ee9dcf55adeac8dc79fdece3445
-        size: 5116
-      wLookerExtra.out.will.yml: *ref_0
+        hash: c8db78408e5d98aacfe7231d18622221
+        size: 5088
