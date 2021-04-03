@@ -4,7 +4,7 @@
   "description" : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
-  "main" : "/pro/module/wLookerExtra/proto/node_modules/wlookerextra",
+  "main" : "proto/node_modules/wlookerextra",
   "files" : [ "proto/wtools/abase/l4", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
