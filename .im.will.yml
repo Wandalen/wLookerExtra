@@ -80,8 +80,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wLookerExtra/proto/wtools/abase/l4/LookerExtra.s
-    - /pro/module/wLookerExtra/proto/node_modules/wlookerextra
+    - proto/wtools/abase/l4/LookerExtra.s
+    - proto/node_modules/wlookerextra
 reflector:
   reflect.proto:
     inherit: predefined.*
