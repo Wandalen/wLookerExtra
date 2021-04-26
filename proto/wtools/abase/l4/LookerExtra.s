@@ -81,7 +81,7 @@ function wrap( o )
 {
   let result = o.dst;
 
-  _.routineOptions( wrap, o );
+  _.routine.options_( wrap, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( o.onCondition )
@@ -494,15 +494,15 @@ function group( o )
     o.usingOriginal = 0;
 
     if( _.longIs( o.key ) )
-    o.key = _.mapKeys.apply( _, o.src );
+    o.key = _.props.keys.apply( _, o.src );
     else
-    o.key = _.mapKeys.apply( _, _.mapVals( o.src ) );
+    o.key = _.props.keys.apply( _, _.props.vals( o.src ) );
 
   }
 
   /* */
 
-  o = _.routineOptions( group, o );
+  o = _.routine.options_( group, o );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( o.key ) || _.arrayIs( o.key ) );
@@ -615,7 +615,6 @@ let IterationPreserve =
 let Searcher = _.looker.classDefine
 ({
   name : 'Searcher',
-  parent : _.Resolver,
   prime : Prime,
   looker : Looker,
   iterator : Iterator,
@@ -637,7 +636,7 @@ _.assert( searchIt.body.defaults === Searcher );
 
 search_body.defaults = Searcher;
 
-let search = _.routine.uniteCloning_({ head : searchIt.head, body : search_body, strategy : 'replacing' });
+let search = _.routine.uniteCloning_replaceByUnite({ head : searchIt.head, body : search_body, strategy : 'replacing' });
 
 _.assert( searchIt.defaults.order === 'all' );
 _.assert( searchIt.defaults === Searcher );
@@ -677,8 +676,8 @@ let SearcherExtension =
 
 }
 
-_.mapExtend( _.entity, EntityExtension );
-_.mapExtend( _.searcher, SearcherExtension );
+_.props.extend( _.entity, EntityExtension );
+_.props.extend( _.searcher, SearcherExtension );
 _.assert( _.routineIs( _.searcher.iteratorIs ) );
 
 // --

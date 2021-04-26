@@ -200,7 +200,7 @@ function entitySearchMapFromObjectLoop( test )
 
   function Obj( src )
   {
-    return _.mapExtend( this, src );
+    return _.props.extend( this, src );
   }
 
   function clean()
@@ -230,7 +230,7 @@ function entitySearchMapFromObjectLoop( test )
       let node = this.src;
       if( !_.objectIs( node ) )
       return;
-      let map = _.mapExtend( null, node );
+      let map = _.props.extend( null, node );
       return this._auxAscend( map );
     }
 
@@ -260,12 +260,12 @@ function entitySearchMapTopToBottom( test )
       elements :
       [
         { el1 : { code : 'test' }, el2 : { code : '.' }, el3 : { code : 'setsAreIdentical' }, code : 'test.setsAreIdentical' },
-        { code : '( rel( _.mapKeys( map ) ), [] )' },
+        { code : '( rel( _.props.keys( map ) ), [] )' },
       ],
-      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+      code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] )',
     },
     el2 : { code : ';' },
-    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] );test.setsAreIdentical = null;',
     el3 :
     {
       code : 'test.setsAreIdentical = null;',
@@ -287,8 +287,8 @@ function entitySearchMapTopToBottom( test )
   var exp =
   {
     '/el1/elements/#0/code' : 'test.setsAreIdentical',
-    '/el1/code' : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
-    '/code' : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    '/el1/code' : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] )',
+    '/code' : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] );test.setsAreIdentical = null;',
     '/el3/code' : 'test.setsAreIdentical = null;'
   }
   test.identical( found, exp );
@@ -381,17 +381,17 @@ function entitySearchMapTopToBottomWithOnUp( test )
       elements :
       [
         { el1 : { code : 'test' }, el2 : { code : '.' }, el3 : { code : 'setsAreIdentical' }, code : 'test.setsAreIdentical' },
-        { code : '( rel( _.mapKeys( map ) ), [] )' },
+        { code : '( rel( _.props.keys( map ) ), [] )' },
       ],
       notCode2 : 'test.setsAreIdentical',
-      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+      code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] )',
     },
     el2 : { code : ';' },
     el3 :
     {
       code : 'test.setsAreIdentical = null;',
     },
-    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] );test.setsAreIdentical = null;',
   }
 
   /* - */
@@ -506,11 +506,11 @@ function entitySearchMapTopToBottomWithOnAscend( test )
   let dws = [];
   let structure =
   {
-    code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] );test.setsAreIdentical = null;',
+    code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] );test.setsAreIdentical = null;',
     el1 :
     {
       notCode1 : 'test.setsAreIdentical',
-      code : 'test.setsAreIdentical( rel( _.mapKeys( map ) ), [] )',
+      code : 'test.setsAreIdentical( rel( _.props.keys( map ) ), [] )',
       elements :
       [
         {
@@ -519,7 +519,7 @@ function entitySearchMapTopToBottomWithOnAscend( test )
           el2 : { code : '.' },
           el3 : { code : 'setsAreIdentical' },
         },
-        { code : '( rel( _.mapKeys( map ) ), [] )' },
+        { code : '( rel( _.props.keys( map ) ), [] )' },
       ],
       notCode2 : 'test.setsAreIdentical',
     },
