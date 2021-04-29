@@ -212,7 +212,7 @@ function entitySearchMapFromObjectLoop( test )
   function iterableEval()
   {
     let it = this;
-    if( _.objectIs( it.src ) )
+    if( _.object.isBasic( it.src ) )
     it.iterable = 'Node';
     else
     it.Looker.iterableEval.call( it );
@@ -228,7 +228,7 @@ function entitySearchMapFromObjectLoop( test )
     it.onAscend = function nodeAscend()
     {
       let node = this.src;
-      if( !_.objectIs( node ) )
+      if( !_.object.isBasic( node ) )
       return;
       let map = _.props.extend( null, node );
       return this._auxAscend( map );
