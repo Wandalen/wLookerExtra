@@ -72,6 +72,7 @@ function entitySearchReturningIt( test )
     'level' : 2,
     'path' : '/e/d',
     'key' : 'd',
+    'cardinal' : 0,
     'index' : 0,
     'src' : 'something',
     'continue' : true,
@@ -84,6 +85,7 @@ function entitySearchReturningIt( test )
     'added' : true
   }
   test.contains( got[ 0 ], exp );
+  test.identical( got[ 0 ].childrenCounter, exp.childrenCounter );
 
 }
 
@@ -651,6 +653,91 @@ entitySearchMapTopToBottomWithOnAscend.description =
 `
 
 // --
+// from Tools
+// --
+
+function entitySize( test )
+{
+
+  test.case = 'empty array';
+  var src = [];
+  test.identical( _.entity.sizeOf( src ), 8 );
+  test.identical( _.entity.sizeOf( src, 8 ), 8 );
+  test.identical( _.entity.sizeOf( src, 0 ), 0 );
+
+  test.case = 'array';
+  var src = [ 3, undefined, 34 ];
+  test.identical( _.entity.sizeOf( src ), 32 );
+  test.identical( _.entity.sizeOf( src, 8 ), 32 );
+  test.identical( _.entity.sizeOf( src, 0 ), 24 );
+
+  test.case = 'argumentsArray';
+  var src = _.argumentsArray.make( [ 1, null, 4 ] );
+  test.identical( _.entity.sizeOf( src ), 32 );
+  test.identical( _.entity.sizeOf( src, 8 ), 32 );
+  test.identical( _.entity.sizeOf( src, 0 ), 24 );
+
+  test.case = 'unroll';
+  var src = _.unroll.make( [ 1, 2, 'str' ] );
+  test.identical( _.entity.sizeOf( src ), 35 );
+  test.identical( _.entity.sizeOf( src, 8 ), 35 );
+  test.identical( _.entity.sizeOf( src, 0 ), 19 );
+
+  test.case = 'BufferTyped';
+  var src = new U8x( [ 1, 2, 3, 4 ] );
+  test.identical( _.entity.sizeOf( src ), 12 );
+  test.identical( _.entity.sizeOf( src, 8 ), 12 );
+  test.identical( _.entity.sizeOf( src, 0 ), 4 );
+
+  test.case = 'BufferRaw';
+  var src = new BufferRaw( 10 );
+  test.identical( _.entity.sizeOf( src ), 18 );
+  test.identical( _.entity.sizeOf( src, 8 ), 18 );
+  test.identical( _.entity.sizeOf( src, 0 ), 10 );
+
+  test.case = 'BufferView';
+  var src = new BufferView( new BufferRaw( 10 ) );
+  test.identical( _.entity.sizeOf( src ), 18 );
+  test.identical( _.entity.sizeOf( src, 8 ), 18 );
+  test.identical( _.entity.sizeOf( src, 0 ), 10 );
+
+  test.case = 'Set';
+  var src = new Set( [ 1, 2, undefined, 4 ] );
+  test.identical( _.entity.sizeOf( src ), 40 );
+  test.identical( _.entity.sizeOf( src, 8 ), 40 );
+  test.identical( _.entity.sizeOf( src, 0 ), 32 );
+
+  test.case = 'map';
+  var src = { a : 1, b : 2, c : 'str' };
+  test.identical( _.entity.sizeOf( src ), 62 );
+  test.identical( _.entity.sizeOf( src, 8 ), 62 );
+  test.identical( _.entity.sizeOf( src, 0 ), 46 );
+
+  test.case = 'HashMap';
+  var src = new HashMap( [ [ undefined, undefined ], [ 1, 2 ], [ '', 'str' ] ] );
+  test.identical( _.entity.sizeOf( src ), 59 );
+  test.identical( _.entity.sizeOf( src, 8 ), 59 );
+  test.identical( _.entity.sizeOf( src, 0 ), 43 );
+
+  test.case = 'pure map';
+  var src = Object.create( null );
+  var o =
+  {
+    'property3' :
+    {
+      enumerable : true,
+      value : 'World',
+      writable : true
+    },
+  };
+  Object.defineProperties( src, o );
+  test.identical( _.entity.sizeOf( src ), 38 );
+  test.identical( _.entity.sizeOf( src, 8 ), 38 );
+  test.identical( _.entity.sizeOf( src, 0 ), 22 );
+
+}
+
+// --
 // declare
 // --
 
@@ -677,6 +764,8 @@ const Proto =
     entitySearchMapTopToBottom,
     entitySearchMapTopToBottomWithOnUp,
     entitySearchMapTopToBottomWithOnAscend,
+
+    entitySize,
 
     // /* qqq : implement test routine iteratorResult, similar replicator have
 

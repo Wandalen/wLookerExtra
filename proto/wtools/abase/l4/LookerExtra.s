@@ -569,6 +569,64 @@ group.defaults =
   usingOriginal : 1,
 }
 
+//
+
+function sizeOf( src, sizeOfContainer )
+{
+  let result = 0;
+
+  if( arguments.length === 1 )
+  sizeOfContainer = 8;
+
+  _.assert( _.number.defined( sizeOfContainer ) );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  // if( _.primitive.is( src ) || !_.iterableIs( src ) || _.bufferAnyIs( src ) ) /* yyy */
+  // if( _.primitive.is( src ) || _.bufferAnyIs( src ) ) /* Dmytro : added branch for routine iterableIs, routine countableIs has different behavior */
+  // if( _.primitive.is( src ) || _.bufferAnyIs( src ) || !( _.mapIs( src ) || _.class.methodIteratorOf( src ) ) )
+  if( _.primitive.is( src ) || _.bufferAnyIs( src ) )
+  return _.entity.uncountableSizeOf( src, sizeOfContainer );
+
+  if( _.look )
+  // if( _.containerIs( src ) || _.iterableIs( src ) ) /* yyy */
+  // if( _.containerIs( src ) )
+  if( _.containerIs( src ) || !( _.mapIs( src ) || _.class.methodIteratorOf( src ) ) )
+  {
+    _.look({ src, onUp : onEach, withCountable : 1 });
+  }
+
+  if( _.look )
+  return result;
+
+  return NaN;
+
+  function onEach( e, k, it )
+  {
+
+    if( !_.number.defined( result ) )
+    {
+      it.iterator.continue = false;
+      return;
+    }
+
+    if( it.iterable !== _.Looker.ContainerNameToIdMap.terminal )
+    result += sizeOfContainer;
+
+    if( !it.down )
+    return;
+
+    // if( it.down.iterable === 'map-like' || it.down.iterable === 'hash-map-like' )
+    if( it.down.iterable === _.Looker.ContainerNameToIdMap.aux || it.down.iterable === _.Looker.ContainerNameToIdMap.hashMap )
+    result += _.entity.uncountableSizeOf( k );
+
+    // if( _.primitive.is( e ) || !_.iterableIs( e ) || _.bufferAnyIs( e ) ) /* yyy */
+    if( _.primitive.is( e ) || _.bufferAnyIs( e ) ) /* yyy */
+    result += _.entity.uncountableSizeOf( e, sizeOfContainer );
+
+  }
+
+}
+
 // --
 // relations
 // --
@@ -656,6 +714,7 @@ let EntityExtension =
   search,
   freezeRecursive,
   group, /* experimental */
+  sizeOf,
 
 }
 
