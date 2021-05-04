@@ -584,13 +584,13 @@ function sizeOf( src, sizeOfContainer )
   // if( _.primitive.is( src ) || !_.iterableIs( src ) || _.bufferAnyIs( src ) ) /* yyy */
   // if( _.primitive.is( src ) || _.bufferAnyIs( src ) ) /* Dmytro : added branch for routine iterableIs, routine countableIs has different behavior */
   // if( _.primitive.is( src ) || _.bufferAnyIs( src ) || !( _.mapIs( src ) || _.class.methodIteratorOf( src ) ) )
-  if( _.primitive.is( src ) || _.bufferAnyIs( src ) )
-  return _.entity.uncountableSizeOf( src, sizeOfContainer );
+  if( _.primitive.is( src ) || _.bufferAnyIs( src ) || _.routineIs( src ) || _.regexpIs( src ) )
+  return _.entity.sizeOfUncountable( src, sizeOfContainer );
 
   if( _.look )
   // if( _.containerIs( src ) || _.iterableIs( src ) ) /* yyy */
   // if( _.containerIs( src ) )
-  if( _.containerIs( src ) || !( _.mapIs( src ) || _.class.methodIteratorOf( src ) ) )
+  // if( _.containerIs( src ) || !( _.mapIs( src ) || _.class.methodIteratorOf( src ) ) )
   {
     _.look({ src, onUp : onEach, withCountable : 1 });
   }
@@ -617,11 +617,11 @@ function sizeOf( src, sizeOfContainer )
 
     // if( it.down.iterable === 'map-like' || it.down.iterable === 'hash-map-like' )
     if( it.down.iterable === _.Looker.ContainerNameToIdMap.aux || it.down.iterable === _.Looker.ContainerNameToIdMap.hashMap )
-    result += _.entity.uncountableSizeOf( k );
+    result += _.entity.sizeOfUncountable( k );
 
     // if( _.primitive.is( e ) || !_.iterableIs( e ) || _.bufferAnyIs( e ) ) /* yyy */
     if( _.primitive.is( e ) || _.bufferAnyIs( e ) ) /* yyy */
-    result += _.entity.uncountableSizeOf( e, sizeOfContainer );
+    result += _.entity.sizeOfUncountable( e, sizeOfContainer );
 
   }
 
