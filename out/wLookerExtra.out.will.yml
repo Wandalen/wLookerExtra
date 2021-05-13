@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - wLookerExtra.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: 10c7f86d61f8cedb4f6355e413d03791
-    size: 1857
-  ../.im.will.yml: &ref_1
-    hash: 727cf02b41e81f46fc833c135fa930b4
-    size: 5038
+  ../will.yml: &ref_0
+    hash: dfed509df58362db98c423c5617ba925
+    size: 6665
 module:
   wLookerExtra.out:
     about:
@@ -18,21 +15,21 @@ module:
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: wlookerextra
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_1
         - wTools
         - wReplicator
         - wResolver
         - complex data structure
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_2
         - Kostiantyn Wandalen <wanalen@01.school>
-      npm.name: wlookerextra
-      npm.scripts: &ref_5
+      interpreters: &ref_3
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      npm.scripts: &ref_4
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -47,15 +44,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -174,7 +167,7 @@ module:
           - ../proto/wtools/amid
           - ../proto/wtools/atop
     submodule:
-      wLooker:
+      wlooker:
         path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
@@ -795,8 +788,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: wLookerExtra
@@ -806,26 +798,22 @@ module:
         LookerExtra extends Looker by extra routines based on look
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: wlookerextra
-      npm.scripts: *ref_5
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_1
+      contributors: *ref_2
+      interpreters: *ref_3
+      npm.scripts: *ref_4
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -927,7 +915,7 @@ module:
           - proto/wtools/abase/l4/LookerExtra.s
           - proto/node_modules/wlookerextra
     submodule:
-      wLooker:
+      wlooker:
         path: 'npm:///wlooker'
         autoExporting: 0
         enabled: 0
@@ -1484,9 +1472,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: 10c7f86d61f8cedb4f6355e413d03791
-        size: 1857
-      ../.im.will.yml:
-        hash: 727cf02b41e81f46fc833c135fa930b4
-        size: 5038
+      ../will.yml:
+        hash: dfed509df58362db98c423c5617ba925
+        size: 6665
