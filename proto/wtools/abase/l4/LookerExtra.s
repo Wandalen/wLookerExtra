@@ -609,14 +609,14 @@ function sizeOf( src, sizeOfContainer )
       return;
     }
 
-    if( it.iterable !== _.Looker.ContainerNameToIdMap.terminal )
+    if( it.iterable !== _.Looker.ContainerType.terminal )
     result += sizeOfContainer;
 
     if( !it.down )
     return;
 
     // if( it.down.iterable === 'map-like' || it.down.iterable === 'hash-map-like' )
-    if( it.down.iterable === _.Looker.ContainerNameToIdMap.aux || it.down.iterable === _.Looker.ContainerNameToIdMap.hashMap )
+    if( it.down.iterable === _.Looker.ContainerType.aux || it.down.iterable === _.Looker.ContainerType.hashMap )
     result += _.entity.sizeOfUncountable( k );
 
     // if( _.primitive.is( e ) || !_.iterableIs( e ) || _.bufferAnyIs( e ) ) /* yyy */
@@ -633,6 +633,8 @@ function sizeOf( src, sizeOfContainer )
 
 let Looker =
 {
+
+  constructor : function Searcher(){},
 
   optionsFromArguments,
   optionsToIteration,

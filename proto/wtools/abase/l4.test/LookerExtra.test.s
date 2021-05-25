@@ -227,7 +227,8 @@ function entitySearchMapFromObjectLoop( test )
     _.assert( arguments.length === 3 );
     ups.push( it.path );
 
-    it.onAscend = function nodeAscend()
+    // it.onAscend = function nodeAscend()
+    it.ascend = function nodeAscend()
     {
       let node = this.src;
       if( !_.object.isBasic( node ) )
@@ -543,7 +544,8 @@ function entitySearchMapTopToBottomWithOnAscend( test )
     order : 'top-to-bottom',
     onUp,
     onDown,
-    onAscend,
+    ascend,
+    // onAscend,
   });
   var exp =
   {
@@ -628,7 +630,8 @@ function entitySearchMapTopToBottomWithOnAscend( test )
     dws.push( it.path );
   }
 
-  function onAscend()
+  // function onAscend()
+  function ascend()
   {
     let it = this;
     _.assert( arguments.length === 0, 'Expects no arguments' );
@@ -640,7 +643,9 @@ function entitySearchMapTopToBottomWithOnAscend( test )
       src.code = it.src.code;
       it.src = src;
     }
-    return it.Looker.onAscend.call( it );
+    debugger;
+    return it.Looker.ascend.call( it );
+    // return it.Looker.onAscend.call( it );
   }
 
 }
