@@ -184,7 +184,7 @@ wrap.defaults =
 
 function search_body( it )
 {
-  _.searcher.Looker.exec.body( it );
+  _.searcher.Seeker.exec.body( it );
   return it.result;
 }
 
@@ -609,14 +609,14 @@ function sizeOf( src, sizeOfContainer )
       return;
     }
 
-    if( it.iterable !== _.Looker.ContainerType.terminal )
+    if( it.iterable !== _.looker.Looker.ContainerType.terminal )
     result += sizeOfContainer;
 
     if( !it.down )
     return;
 
     // if( it.down.iterable === 'map-like' || it.down.iterable === 'hash-map-like' )
-    if( it.down.iterable === _.Looker.ContainerType.aux || it.down.iterable === _.Looker.ContainerType.hashMap )
+    if( it.down.iterable === _.looker.Looker.ContainerType.aux || it.down.iterable === _.looker.Looker.ContainerType.hashMap )
     result += _.entity.sizeOfUncountable( k );
 
     // if( _.primitive.is( e ) || !_.iterableIs( e ) || _.bufferAnyIs( e ) ) /* yyy */
@@ -676,7 +676,7 @@ let Searcher = _.looker.classDefine
 ({
   name : 'Searcher',
   prime : Prime,
-  looker : Looker,
+  seeker : Looker,
   iterator : Iterator,
   iteration : Iteration,
   iterationPreserve : IterationPreserve,
@@ -732,7 +732,7 @@ let SearcherExtension =
   searchIt,
   look : searchIt,
   search,
-  Looker : Searcher,
+  Seeker : Searcher,
   Searcher,
 
 }

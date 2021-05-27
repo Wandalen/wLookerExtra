@@ -217,7 +217,7 @@ function entitySearchMapFromObjectLoop( test )
     if( _.object.isBasic( it.src ) )
     it.iterable = 'Node';
     else
-    it.Looker.iterableEval.call( it );
+    it.Seeker.iterableEval.call( it );
   }
 
   function onUp( e, k, _it )
@@ -644,8 +644,8 @@ function entitySearchMapTopToBottomWithOnAscend( test )
       it.src = src;
     }
     debugger;
-    return it.Looker.ascend.call( it );
-    // return it.Looker.onAscend.call( it );
+    return it.Seeker.ascend.call( it );
+    // return it.Seeker.onAscend.call( it );
   }
 
 }
