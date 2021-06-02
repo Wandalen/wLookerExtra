@@ -737,8 +737,8 @@ let SearcherExtension =
 
 }
 
-_.props.extend( _.entity, EntityExtension );
-_.props.extend( _.searcher, SearcherExtension );
+/* _.props.extend */Object.assign( _.entity, EntityExtension );
+/* _.props.extend */Object.assign( _.searcher, SearcherExtension );
 _.assert( _.routineIs( _.searcher.iteratorIs ) );
 
 // --
