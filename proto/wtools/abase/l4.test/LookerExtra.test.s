@@ -643,7 +643,6 @@ function entitySearchMapTopToBottomWithOnAscend( test )
       src.code = it.src.code;
       it.src = src;
     }
-    debugger;
     return it.Seeker.ascend.call( it );
     // return it.Seeker.onAscend.call( it );
   }
