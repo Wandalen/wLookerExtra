@@ -9,13 +9,6 @@
   @extends Tools
 */
 
-/**
- *  */
-
-/**
- * Collection of light-weight routines to traverse complex data structure.
-*/
-
 if( typeof module !== 'undefined' )
 {
 
@@ -737,8 +730,8 @@ let SearcherExtension =
 
 }
 
-/* _.props.extend */Object.assign( _.entity, EntityExtension );
-/* _.props.extend */Object.assign( _.searcher, SearcherExtension );
+Object.assign( _.entity, EntityExtension );
+Object.assign( _.searcher, SearcherExtension );
 _.assert( _.routineIs( _.searcher.iteratorIs ) );
 
 // --
