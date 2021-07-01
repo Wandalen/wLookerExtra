@@ -1,22 +1,37 @@
 {
-  "name" : "wlookerextra",
-  "version" : "0.3.247",
-  "description" : "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "license" : "MIT",
-  "main" : "proto/node_modules/wlookerextra",
-  "files" : [ "proto/wtools/abase/l4", "out", "proto/node_modules", "proto/node_modules/Tools", "proto/node_modules/wlookerextra" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/wLookerExtra.git"
+  "name": "wlookerextra",
+  "version": "0.3.248",
+  "description": "Collection of light-weight routines to traverse complex data structure. LookerExtra extends Looker by extra routines based on look",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "license": "MIT",
+  "main": "proto/node_modules/wlookerextra",
+  "files": [
+    "proto/wtools/abase/l4",
+    "out",
+    "proto/node_modules",
+    "proto/node_modules/Tools",
+    "proto/node_modules/wlookerextra"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-3",
+    "docgen": "wdocgen proto"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wLookerExtra/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wLookerExtra.git"
   },
-  "dependencies" : { "wTools" : "", "wlooker" : "" },
-  "devDependencies" : { "wTesting" : "", "eslint" : "7.1.0" },
-  "keywords" : [ "wTools" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wLookerExtra/issues"
+  },
+  "dependencies": {
+    "wTools": "",
+    "wlooker": ""
+  },
+  "devDependencies": {
+    "wTesting": "",
+    "eslint": "7.1.0"
+  },
+  "keywords": [
+    "wTools"
+  ]
 }
