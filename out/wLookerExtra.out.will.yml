@@ -3,8 +3,8 @@ root:
   - wLookerExtra.out
 consistency:
   ../will.yml: &ref_0
-    hash: 62e730e303cbb2c490e9a55f964be500
-    size: 6524
+    hash: 689ffa437b2dd10b30ea876208ff0282
+    size: 6532
 module:
   wLookerExtra.out:
     about:
@@ -1455,5 +1455,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 62e730e303cbb2c490e9a55f964be500
-        size: 6524
+        hash: 689ffa437b2dd10b30ea876208ff0282
+        size: 6532
